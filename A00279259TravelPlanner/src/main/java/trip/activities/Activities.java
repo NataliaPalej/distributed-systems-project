@@ -7,18 +7,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name="activity")
-@XmlType(propOrder = { "id", "tripId", "name", "time", "location", "cost" })
+@XmlType(propOrder = { "activityId", "tripId", "name", "time", "location", "cost" })
 public class Activities {
 	
-	private int id, tripId;
+	private int activityId, tripId;
     private String name, location;
     private LocalTime time;
     private BigDecimal cost;
     
     public Activities() {}
     
-    public Activities(int id, int tripId, String name, LocalTime time, String location, BigDecimal cost) {
-        this.id = id;
+    public Activities(int activityId, int tripId, String name, LocalTime time, String location, BigDecimal cost) {
+        this.activityId = activityId;
         this.tripId = tripId;
         this.name = name;
         this.time = time;
@@ -27,11 +27,11 @@ public class Activities {
     }
 
 	public int getId() {
-		return id;
+		return activityId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setId(int activityId) {
+		this.activityId = activityId;
 	}
 
 	public int getTripId() {
@@ -76,7 +76,7 @@ public class Activities {
 
 	@Override
 	public String toString() {
-		return "Activities [id=" + id + ", tripId=" + tripId + ", name=" + name + ", location=" + location + ", time="
+		return "Activities [activityId=" + activityId + ", tripId=" + tripId + ", name=" + name + ", location=" + location + ", time="
 				+ time + ", cost=" + cost + "]";
 	}
 

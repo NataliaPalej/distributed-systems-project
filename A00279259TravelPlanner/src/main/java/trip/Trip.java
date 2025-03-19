@@ -1,7 +1,7 @@
 package trip;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.sql.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -12,17 +12,18 @@ import javax.xml.bind.annotation.XmlType;
  */
 
 @XmlRootElement(name="trip") // Allows JAXB to convert obj to XML/JSON
-@XmlType(propOrder = { "id", "destination", "startDate", "endDate", "budget", "notes" } ) // Order in which the data will be placed
+@XmlType(propOrder = { "tripId", "destination", "startDate", "endDate", "budget", "notes" } ) // Order in which the data will be placed
 public class Trip {
-	private int id;
+	private int tripId;
 	private String destination, notes;
-	private LocalDate startDate, endDate;
+	private Date startDate;
+	private Date endDate;
 	private BigDecimal budget;
 	
 	public Trip() {}
 	
-	public Trip(int id, String destination, LocalDate startDate, LocalDate endDate, BigDecimal budget, String notes) {
-        this.id = id;
+	public Trip(int tripId, String destination, Date startDate, Date endDate, BigDecimal budget, String notes) {
+        this.tripId = tripId;
         this.destination = destination;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -31,10 +32,10 @@ public class Trip {
     }
 	
 	public int getId() {
-		return id;
+		return tripId;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setId(int tripId) {
+		this.tripId = tripId;
 	}
 	public String getDestination() {
 		return destination;
@@ -48,16 +49,16 @@ public class Trip {
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
-	public LocalDate getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(LocalDate startDate) {
-		this.startDate = startDate;
+	public void setStartDate(Date date) {
+		this.startDate = date;
 	}
-	public LocalDate getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(LocalDate endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 	public BigDecimal getBudget() {
@@ -68,7 +69,7 @@ public class Trip {
 	}
 	@Override
 	public String toString() {
-		return "Trip [id=" + id + ", destination=" + destination + ", notes=" + notes + ", startDate=" + startDate
+		return "Trip [tripId=" + tripId + ", destination=" + destination + ", notes=" + notes + ", startDate=" + startDate
 				+ ", endDate=" + endDate + ", budget=" + budget + "]";
 	}
 }

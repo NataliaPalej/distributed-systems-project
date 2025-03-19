@@ -24,7 +24,7 @@
 		<init-param>
 			<param-name>com.sun.jersey.config.property.packages</param-name>
 			<!-- The below param-value needs to be changed to the package name -->
-			<param-value>trip;trip.activities</param-value>
+			<param-value>myApp</param-value>
 		</init-param>
 		<init-param>
 			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
