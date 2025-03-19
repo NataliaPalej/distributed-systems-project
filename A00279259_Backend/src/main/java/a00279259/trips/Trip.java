@@ -31,10 +31,10 @@ public class Trip {
         this.notes = notes;
     }
 	
-	public int getId() {
+	public int getTripId() {
 		return tripId;
 	}
-	public void setId(int tripId) {
+	public void setTripId(int tripId) {
 		this.tripId = tripId;
 	}
 	public String getDestination() {

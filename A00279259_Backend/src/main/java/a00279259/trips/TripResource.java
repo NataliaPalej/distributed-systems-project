@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 
 import a00279259.TripDAOsql;
 
+// http://localhost:8080/A00279259_Backend/rest/trips
 @Path("/trips")
 public class TripResource {
 	
@@ -46,6 +47,7 @@ public class TripResource {
 			@FormParam("budget") BigDecimal budget,
 			@FormParam("notes") String notes,
 			@Context HttpServletResponse servletResponse) throws IOException {
+		
 		Trip newTrip = new Trip();
 		newTrip.setDestination(destination);
 		newTrip.setStartDate(startDate);
@@ -65,14 +67,13 @@ public class TripResource {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Trip updateTrip(
-			@PathParam("tripId") String id,
+			@PathParam("tripId") int tripId,
 			@FormParam("destination") String destination,
 			@FormParam("startDate") Date startDate,
 			@FormParam("endDate") Date endDate,
 			@FormParam("budget") BigDecimal budget,
 			@FormParam("notes") String notes) {
 		
-		int tripId = Integer.parseInt(id);
 		Trip existingTrip = TripDAOsql.instance.getTrip(tripId);
 		
 		if (existingTrip == null) {

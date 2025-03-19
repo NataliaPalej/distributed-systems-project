@@ -2,7 +2,6 @@ package a00279259.activities;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -90,10 +89,10 @@ public enum ActivitiesDAO {
 		Activities existingActivity = activitiesMap.get(id);
 		
 		// Update activity 
-		if (updatedActivity.getTripId() > 0 && updatedActivity.getName() != null && updatedActivity.getTime() != null && updatedActivity.getLocation() != null && updatedActivity.getCost() != null) {
+		if (updatedActivity.getTripId() > 0 && updatedActivity.getName() != null && updatedActivity.getActivityDate() != null && updatedActivity.getLocation() != null && updatedActivity.getCost() != null) {
 			existingActivity.setTripId(updatedActivity.getTripId());
 			existingActivity.setName(updatedActivity.getName());
-			existingActivity.setTime(updatedActivity.getTime());
+			existingActivity.setActivityDate(updatedActivity.getActivityDate());
 			existingActivity.setLocation(updatedActivity.getLocation());
 			existingActivity.setCost(updatedActivity.getCost());
 		}

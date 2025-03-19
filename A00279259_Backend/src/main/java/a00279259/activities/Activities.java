@@ -7,21 +7,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name="activity")
-@XmlType(propOrder = { "activityId", "tripId", "name", "time", "location", "cost" })
+@XmlType(propOrder = { "activityId", "tripId", "name", "activityDate", "location", "cost" })
 public class Activities {
 	
 	private int activityId, tripId;
     private String name, location;
-    private Date time;
+    private Date activityDate;
     private BigDecimal cost;
     
     public Activities() {}
     
-    public Activities(int activityId, int tripId, String name, Date time, String location, BigDecimal cost) {
+    public Activities(int activityId, int tripId, String name, Date activityDate, String location, BigDecimal cost) {
         this.activityId = activityId;
         this.tripId = tripId;
         this.name = name;
-        this.time = time;
+        this.activityDate = activityDate;
         this.location = location;
         this.cost = cost;
     }
@@ -58,12 +58,12 @@ public class Activities {
 		this.location = location;
 	}
 
-	public Date getTime() {
-		return time;
+	public Date getActivityDate() {
+		return activityDate;
 	}
 
-	public void setTime(Date time) {
-		this.time = time;
+	public void setActivityDate(Date activityDate) {
+		this.activityDate = activityDate;
 	}
 
 	public BigDecimal getCost() {
@@ -76,6 +76,6 @@ public class Activities {
 
 	public String toString() {
 		return "Activities [activityId=" + activityId + ", tripId=" + tripId + ", name=" + name + ", location="
-				+ location + ", time=" + time + ", cost=" + cost + "]";
+				+ location + ", activityDate=" + activityDate + ", cost=" + cost + "]";
 	}
 }

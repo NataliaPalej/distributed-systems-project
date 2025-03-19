@@ -2,9 +2,7 @@ package a00279259.activities;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.MulticastSocket;
 import java.sql.Date;
-import java.time.LocalTime;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,14 +17,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.xml.bind.annotation.XmlType;
 
 import a00279259.ActivitiesDAOsql;
-import a00279259.TripDAOsql;
-import a00279259.activities.Activities;
-import a00279259.trips.Trip;
 
-// http://localhost:8080/A00279259TravelPlanner/rest/trips
+// http://localhost:8080/A00279259_Backend/rest/activities
 @Path("/activities")
 public class ActivitiesResource {
 	
@@ -59,20 +53,20 @@ public class ActivitiesResource {
     public void addActivity(
             @FormParam("tripId") int tripId,
             @FormParam("name") String name,
-            @FormParam("time") Date time,
+            @FormParam("activityDate") Date activityDate,
             @FormParam("location") String location,
             @FormParam("cost") BigDecimal cost,
             @Context HttpServletResponse servletResponse) throws IOException {
 
         // Set id to "0" as its auto-generated and handled by ActivitiesDAO
-        Activities newActivity = new Activities(0, tripId, name, time, location, cost);
+        Activities newActivity = new Activities(0, tripId, name, activityDate, location, cost);
         ActivitiesDAOsql.instance.addActivity(newActivity);
 
         System.out.println("New activity added successfully.");
         servletResponse.sendRedirect("../addActivity.html");
     }
 	
-	// @XmlType(propOrder = { "activityId", "tripId", "name", "time", "location", "cost" })
+	// @XmlType(propOrder = { "activityId", "tripId", "name", "activityDate", "location", "cost" })
 	@PUT
 	@Path("{activityId}")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -81,7 +75,7 @@ public class ActivitiesResource {
 			@PathParam("activityId") int activityId,
 			@FormParam("tripId") int tripId,
 			@FormParam("name") String name,
-			@FormParam("time") Date time,
+			@FormParam("activityDate") Date activityDate,
 			@FormParam("location") String location,
 			@FormParam("cost") BigDecimal cost) {
 		
@@ -96,7 +90,7 @@ public class ActivitiesResource {
 		if (activityId > 0) existingActivity.setActivityId(activityId);
 		if (tripId > 0) existingActivity.setTripId(tripId);
 		if (name != null) existingActivity.setName(name);
-		if (time != null) existingActivity.setTime(time);
+		if (activityDate != null) existingActivity.setActivityDate(activityDate);
 		if (location != null) existingActivity.setLocation(location);
 		if (cost != null) existingActivity.setCost(cost);
 		

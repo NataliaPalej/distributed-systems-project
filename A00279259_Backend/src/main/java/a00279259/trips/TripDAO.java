@@ -16,7 +16,7 @@ public enum TripDAO {
 	// Constructor to initialize trips
 	private TripDAO() {
 		Trip t1 = new Trip();
-		t1.setId(1);
+		t1.setTripId(1);
 	    t1.setDestination("New York, USA");
 	    t1.setStartDate(Date.valueOf("2025-01-14"));
 	    t1.setEndDate(Date.valueOf("2025-01-20"));
@@ -26,7 +26,7 @@ public enum TripDAO {
 	    tripsMap.put(1, t1);
 	    
 	    Trip t2 = new Trip();
-	    t2.setId(2);
+	    t2.setTripId(2);
 	    t2.setDestination("Chania, Crete, Greece");
 	    t2.setStartDate(Date.valueOf("2025-09-18"));
 	    t2.setEndDate(Date.valueOf("2025-09-28"));
@@ -36,7 +36,7 @@ public enum TripDAO {
 	    tripsMap.put(2, t2);
 	    
 	    Trip t3 = new Trip();
-	    t3.setId(3);
+	    t3.setTripId(3);
 	    t3.setDestination("Santorini, Greece");
 	    t3.setStartDate(Date.valueOf("2025-09-15"));
 	    t3.setEndDate(Date.valueOf("2025-09-18"));
@@ -46,7 +46,7 @@ public enum TripDAO {
 	    tripsMap.put(3, t3);
 	    
 	    Trip t4 = new Trip();
-	    t4.setId(4);
+	    t4.setTripId(4);
 	    t4.setDestination("Bali, Indonesia");
 	    t4.setStartDate(Date.valueOf("2025-06-06"));
 	    t4.setEndDate(Date.valueOf("2025-06-17"));
@@ -56,7 +56,7 @@ public enum TripDAO {
 	    tripsMap.put(4, t4);
 	    
 	    Trip t5 = new Trip();
-	    t5.setId(5);
+	    t5.setTripId(5);
 	    t5.setDestination("Krakow, Poland");
 	    t5.setStartDate(Date.valueOf("2025-12-20"));
 	    t5.setEndDate(Date.valueOf("2026-01-02"));
@@ -83,7 +83,7 @@ public enum TripDAO {
 	// Add new trip
 	public Trip addTrip(Trip trip) {
         int id = tripsMap.size() + 1;
-        trip.setId(id);
+        trip.setTripId(id);
         tripsMap.put(id, trip);
         
         System.out.println("New trip was added successfully.\n" + trip.toString());
