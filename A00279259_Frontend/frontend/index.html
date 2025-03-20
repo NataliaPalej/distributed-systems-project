@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Natalia Palej A00279259</title>
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="styles/index.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <!-- Header with Background Image -->
     <header class="background">
         <h1>Explore Your Next Adventure</h1>
     </header>
@@ -21,15 +23,22 @@
         </ul>
     </nav>
 
-    <!-- Trips Section -->
+    <!-- Trips -->
     <section class="trips-container"> 
     	<h2>Upcoming Trips</h2>
-		<div id="upcomingTrips" class="trip-container"></div>
-		
-    	<h2>Past Trips</h2>
-		<div id="pastTrips" class="trip-container"></div>
+    	<div class="trip-list" id="upcomingTrips"></div>
     </section>
+    
+    <section class="trips-container">
+    	<h2>Past Trips</h2>
+		<div class="trip-list" id="pastTrips"></div>
+    </section>
+    
+    <footer>
+	    <p>&copy; 2025 Natalia Palej | A00279259 | <span class="footer-highlight">❤ Love for Trips</span> ✈️🌍</p>
+	    <p>Software Design with Artificial Intelligence for Cloud Computing</p>
+	</footer>
 
-    <script src="scripts/trips.js"></script>
+    <script src="scripts/index.js"></script>
 </body>
 </html>
