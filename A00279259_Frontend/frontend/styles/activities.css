@@ -6,6 +6,12 @@
     font-family: Arial, sans-serif;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
 /* Header */
 .background {
     background: url('../images/background2.jpg') no-repeat center center/cover;
@@ -53,9 +59,19 @@
 }
 
 /* Activities Section */
+.destination-highlight {
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: #ff5733; 
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-family: 'Playfair Display', serif;
+}
+
 .activities-container {
     padding: 20px;
     text-align: center;
+    flex: 1;
 }
 
 .activities-container h2 {
@@ -114,8 +130,6 @@ footer {
     text-align: center;
     padding: 20px;
     margin-top: 30px;
-    position: absolute;
-    bottom: 0;
     width: 100%;
 }
 

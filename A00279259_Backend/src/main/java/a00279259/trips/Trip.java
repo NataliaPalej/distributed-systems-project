@@ -1,7 +1,6 @@
 package a00279259.trips;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,18 +14,16 @@ import a00279259.activities.Activities;
  */
 
 @XmlRootElement(name="trip") // Allows JAXB to convert obj to XML/JSON
-@XmlType(propOrder = { "tripId", "destination", "startDate", "endDate", "budget", "notes" } ) // Order in which the data will be placed
+@XmlType(propOrder = { "tripId", "destination", "startDate", "endDate", "budget", "notes", "activities" } ) // Order in which the data will be placed
 public class Trip {
 	private int tripId;
-	private String destination, notes;
-	private Date startDate;
-	private Date endDate;
+	private String destination, notes, startDate, endDate;
 	private BigDecimal budget;
 	private List<Activities> activities;
 	
 	public Trip() {}
 	
-	public Trip(String destination, Date startDate, Date endDate, BigDecimal budget, String notes) {
+	public Trip(String destination, String startDate, String endDate, BigDecimal budget, String notes) {
         this.destination = destination;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -34,7 +31,7 @@ public class Trip {
         this.notes = notes;
     }
 	
-	public Trip(int tripId, String destination, Date startDate, Date endDate, BigDecimal budget, String notes) {
+	public Trip(int tripId, String destination, String startDate, String endDate, BigDecimal budget, String notes) {
         this.tripId = tripId;
         this.destination = destination;
         this.startDate = startDate;
@@ -69,16 +66,16 @@ public class Trip {
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
-	public Date getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(Date date) {
+	public void setStartDate(String date) {
 		this.startDate = date;
 	}
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 	public BigDecimal getBudget() {

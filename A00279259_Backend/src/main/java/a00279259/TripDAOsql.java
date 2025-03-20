@@ -2,7 +2,6 @@ package a00279259;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -55,11 +54,11 @@ public enum TripDAOsql {
 	}
 	
 	private void insertInitialTrips() {
-		addTrip(new Trip("New York, USA", Date.valueOf("2025-01-14"), Date.valueOf("2025-01-20"), BigDecimal.valueOf(2500.00), "Exploring NYC, food tour and Times Square"));
-	    addTrip(new Trip("Chania, Crete, Greece", Date.valueOf("2025-09-18"), Date.valueOf("2025-09-28"), BigDecimal.valueOf(2000.00), "Chilling on the beach, visit Samaria Gorge."));
-	    addTrip(new Trip("Santorini, Greece", Date.valueOf("2025-09-15"), Date.valueOf("2025-09-18"), BigDecimal.valueOf(1500.00), "Sunset views, volcano tour, and buggy adventure."));
-	    addTrip(new Trip("Bali, Indonesia", Date.valueOf("2025-06-06"), Date.valueOf("2025-06-17"), BigDecimal.valueOf(2700.00), "Temple visits, rice terraces, and scuba diving."));
-	    addTrip(new Trip("Krakow, Poland", Date.valueOf("2025-12-20"), Date.valueOf("2026-01-02"), BigDecimal.valueOf(1500.00), "Exploring old town, Auschwitz tour, and visit home."));
+		addTrip(new Trip("New York, USA", "14-01-2025", "20-01-2025", BigDecimal.valueOf(2500.00), "Exploring NYC, food tour and Times Square"));
+	    addTrip(new Trip("Chania, Crete, Greece", "18-09-20258", "28-09-2025", BigDecimal.valueOf(2000.00), "Chilling on the beach, visit Samaria Gorge."));
+	    addTrip(new Trip("Santorini, Greece", "15-09-2025", "18-09-2025", BigDecimal.valueOf(1500.00), "Sunset views, volcano tour, and buggy adventure."));
+	    addTrip(new Trip("Bali, Indonesia", "06-06-2025", "17-06-2025", BigDecimal.valueOf(2700.00), "Temple visits, rice terraces, and scuba diving."));
+	    addTrip(new Trip("Krakow, Poland", "20-12-2025", "02-01-2026", BigDecimal.valueOf(1500.00), "Exploring old town, Auschwitz tour, and visit home."));
 	    
 	    System.out.println("Initial trips inserted successfully.");
 	}
@@ -73,8 +72,8 @@ public enum TripDAOsql {
 				Trip t = new Trip();
 				t.setTripId(rs.getInt("tripId"));
 				t.setDestination(rs.getString("destination"));
-				t.setStartDate(rs.getDate("startDate"));
-				t.setEndDate(rs.getDate("endDate"));
+				t.setStartDate(rs.getString("startDate"));
+				t.setEndDate(rs.getString("endDate"));
 				t.setBudget(rs.getBigDecimal("budget"));
 				t.setNotes(rs.getString("notes"));
 				trips.add(t);
@@ -96,8 +95,8 @@ public enum TripDAOsql {
 				Trip t = new Trip();
 				t.setTripId(rs.getInt("tripId"));
 				t.setDestination(rs.getString("destination"));
-				t.setStartDate(rs.getDate("startDate"));
-				t.setEndDate(rs.getDate("endDate"));
+				t.setStartDate(rs.getString("startDate"));
+				t.setEndDate(rs.getString("endDate"));
 				t.setBudget(rs.getBigDecimal("budget"));
 				t.setNotes(rs.getString("notes"));
 				
@@ -127,7 +126,7 @@ public enum TripDAOsql {
                         rs.getInt("activityId"),
                         rs.getInt("tripId"),
                         rs.getString("name"),
-                        rs.getDate("activityDate"),
+                        rs.getString("activityDate"),
                         rs.getString("location"),
                         rs.getBigDecimal("cost")
                 );
@@ -147,8 +146,8 @@ public enum TripDAOsql {
 		// @XmlType(propOrder = { "tripId", "destination", "startDate", "endDate", "budget", "notes" } ) // Order in which the data will be placed
 		try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			stmt.setString(1, trip.getDestination());
-            stmt.setDate(2, trip.getStartDate());
-            stmt.setDate(3, trip.getEndDate());
+            stmt.setString(2, trip.getStartDate());
+            stmt.setString(3, trip.getEndDate());
             stmt.setBigDecimal(4, trip.getBudget());
             stmt.setString(5, trip.getNotes());
 
@@ -190,14 +189,14 @@ public enum TripDAOsql {
 	        
 	        // Use existing values if new values are null
 	        String destination = updatedTrip.getDestination() != null ? updatedTrip.getDestination() : existingTrip.getDestination();
-	        Date startDate = updatedTrip.getStartDate() != null ? updatedTrip.getStartDate() : existingTrip.getStartDate();
-	        Date endDate = updatedTrip.getEndDate() != null ? updatedTrip.getEndDate() : existingTrip.getEndDate();
+	        String startDate = updatedTrip.getStartDate() != null ? updatedTrip.getStartDate() : existingTrip.getStartDate();
+	        String endDate = updatedTrip.getEndDate() != null ? updatedTrip.getEndDate() : existingTrip.getEndDate();
 	        BigDecimal budget = updatedTrip.getBudget() != null ? updatedTrip.getBudget() : existingTrip.getBudget();
 	        String notes = updatedTrip.getNotes() != null ? updatedTrip.getNotes() : existingTrip.getNotes();
 
 	        stmt.setString(1, destination);
-	        stmt.setDate(2, startDate);
-	        stmt.setDate(3, endDate);
+	        stmt.setString(2, startDate);
+	        stmt.setString(3, endDate);
 	        stmt.setBigDecimal(4, budget);
 	        stmt.setString(5, notes);
 	        stmt.setInt(6, tripId);

@@ -1,7 +1,6 @@
 package a00279259.activities;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -11,13 +10,12 @@ import javax.xml.bind.annotation.XmlType;
 public class Activities {
 	
 	private int activityId, tripId;
-    private String name, location;
-    private Date activityDate;
+    private String name, location, activityDate;
     private BigDecimal cost;
     
     public Activities() {}
     
-    public Activities(int activityId, int tripId, String name, Date activityDate, String location, BigDecimal cost) {
+    public Activities(int activityId, int tripId, String name, String activityDate, String location, BigDecimal cost) {
         this.activityId = activityId;
         this.tripId = tripId;
         this.name = name;
@@ -26,7 +24,7 @@ public class Activities {
         this.cost = cost;
     }
 
-    public Activities(int tripId, String name, Date activityDate, String location, BigDecimal cost) {
+    public Activities(int tripId, String name, String activityDate, String location, BigDecimal cost) {
         this.tripId = tripId;
         this.name = name;
         this.activityDate = activityDate;
@@ -66,11 +64,11 @@ public class Activities {
 		this.location = location;
 	}
 
-	public Date getActivityDate() {
+	public String getActivityDate() {
 		return activityDate;
 	}
 
-	public void setActivityDate(Date activityDate) {
+	public void setActivityDate(String activityDate) {
 		this.activityDate = activityDate;
 	}
 

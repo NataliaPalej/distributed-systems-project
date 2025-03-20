@@ -2,7 +2,6 @@ package a00279259;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import a00279259.activities.Activities;
-import a00279259.trips.Trip;
 
 // http://localhost:8080/a00279259/rest/activities
 public enum ActivitiesDAOsql {
@@ -51,30 +49,36 @@ public enum ActivitiesDAOsql {
     }
     
     private void insertInitialActivities() {
-    	// NYC Activities
-    	addActivity(new Activities(1, "Visit Statue of Liberty and Ellis Island", Date.valueOf("2025-01-15"), "Jersey City, USA", BigDecimal.valueOf(59.95)));
-        addActivity(new Activities(1, "Visit Times Square", Date.valueOf("2025-01-16"), "Manhattan, New York, USA", BigDecimal.valueOf(0)));
-        addActivity(new Activities(1, "Visit Rockefeller Center", Date.valueOf("2025-01-17"), "45 Rockefeller Plaza, New York, USA", BigDecimal.valueOf(25.00)));
+    	// NYC Activities 
+    			addActivity(new Activities(1, 1, "Visit Statue of Liberty and Ellis Island", "10-06-2025", "New York, USA", BigDecimal.valueOf(59.95)));
+    		    addActivity(new Activities(2, 1, "Visit Times Square", "11-06-2025", "New York, USA", BigDecimal.ZERO));
+    		    addActivity(new Activities(3, 1, "Visit Rockefeller Center", "06-12-2025", "New York, USA", BigDecimal.valueOf(25.00)));
 
-        // Crete Activities
-        addActivity(new Activities(2, "Visit Samaria Gorge", Date.valueOf("2025-09-19"), "Agia Roumeli, Crete, Greece", BigDecimal.valueOf(45.00)));
-        addActivity(new Activities(2, "Visit Sainta Limania", Date.valueOf("2025-09-20"), "Chania, Crete, Greece", BigDecimal.valueOf(15.00)));
-        addActivity(new Activities(2, "Visit Balos", Date.valueOf("2025-09-21"), "Balos, Crete, Greece", BigDecimal.valueOf(30.00)));
-
-        // Santorini Activities
-        addActivity(new Activities(3, "Visit Oia", Date.valueOf("2025-09-15"), "Oia, Santorini, Greece", BigDecimal.valueOf(0)));
-        addActivity(new Activities(3, "Visit Thera", Date.valueOf("2025-09-16"), "Thera, Santorini, Greece", BigDecimal.valueOf(0)));
-        addActivity(new Activities(3, "Visit Red Beach", Date.valueOf("2025-09-17"), "Akrotiri, Santorini, Greece", BigDecimal.valueOf(0)));
-
-        // Bali Activities
-        addActivity(new Activities(4, "Explore Ubud Monkey Forest", Date.valueOf("2025-06-07"), "Ubud, Bali, Indonesia", BigDecimal.valueOf(10.00)));
-        addActivity(new Activities(4, "Visit Tanah Lot Temple", Date.valueOf("2025-06-08"), "Tabanan Regency, Bali, Indonesia", BigDecimal.valueOf(6.00)));
-        addActivity(new Activities(4, "Experience Bali Swing", Date.valueOf("2025-06-09"), "Badung Regency, Bali, Indonesia", BigDecimal.valueOf(60.00)));
-
-        // Krakow Activities
-        addActivity(new Activities(5, "Visit Main Square", Date.valueOf("2025-12-21"), "Krakow, Poland", BigDecimal.valueOf(0)));
-        addActivity(new Activities(5, "Visit Auschwitz", Date.valueOf("2025-12-22"), "Oswiecim, Poland", BigDecimal.valueOf(80.00)));
-        addActivity(new Activities(5, "Visit Salt Mine", Date.valueOf("2025-12-23"), "Wieliczka, Poland", BigDecimal.valueOf(50.00)));
+    			// Crete Activities
+    		    addActivity(new Activities(4, 2, "Visit Samaria Gorge", "19-09-2025", "Chania, Crete, Greece", BigDecimal.valueOf(45.00)));
+    		    addActivity(new Activities(5, 2, "Visit Sainta Limania", "20-09-2025", "Chania, Crete, Greece", BigDecimal.valueOf(15.00)));
+    		    addActivity(new Activities(6, 2, "Visit Balos", "21-09-2025", "Chania, Crete, Greece", BigDecimal.valueOf(30.00)));
+    		    addActivity(new Activities(7, 2, "Visit Elafonisi", "22-09-2025", "Chania, Crete, Greece", BigDecimal.valueOf(40.00)));
+    		    addActivity(new Activities(8, 2, "Visit Fallasarna", "23-09-2025", "Chania, Crete, Greece", BigDecimal.valueOf(40.00)));
+    			
+    		    // Santorini Activities 
+    		    addActivity(new Activities(9, 3, "Visit Oia", "15-09-2025", "Santorini, Greece", BigDecimal.ZERO));
+    		    addActivity(new Activities(10, 3, "Visit Thera", "16-09-2025", "Santorini, Greece", BigDecimal.ZERO));
+    		    addActivity(new Activities(11, 3, "Visit Red Beach", "17-09-2025", "Santorini, Greece", BigDecimal.ZERO));
+    		    addActivity(new Activities(12, 3, "Visit White Beach", "17-09-2025", "Santorini, Greece", BigDecimal.ZERO));
+    		    addActivity(new Activities(13, 3, "Do Buggie Adventure", "16-09-2025", "Santorini, Greece", BigDecimal.valueOf(160.00)));
+    		    
+    			// Bali Activities 
+    		    addActivity(new Activities(14, 4, "Explore Ubud Monkey Forest", "10-06-2025", "Ubud, Bali, Indonesia", BigDecimal.valueOf(10.00)));
+    		    addActivity(new Activities(15, 4, "Visit Tanah Lot Temple", "11-06-2025", "Bali, Indonesia", BigDecimal.valueOf(6.00)));
+    		    addActivity(new Activities(16, 4, "Experience Bali Swing", "12-06-2025", "Bali, Indonesia", BigDecimal.valueOf(60.00)));
+    		    
+    			// Krakow Activities 
+    		    addActivity(new Activities(17, 5, "Visit Main Square", "21-12-2025", "Krakow, Poland", BigDecimal.ZERO));
+    		    addActivity(new Activities(18, 5, "Visit Auschwitz", "22-12-2025", "Oswiecim, Poland", BigDecimal.valueOf(80.00)));
+    		    addActivity(new Activities(19, 5, "Visit Salt Mine", "23-12-2025", "Wieliczka, Poland", BigDecimal.valueOf(50.00)));
+    		    addActivity(new Activities(20, 5, "Go Shopping (Galeria Krakowska & Bonarka", "21-12-2025", "Krakow, Poland", BigDecimal.valueOf(800.00)));
+    		    addActivity(new Activities(21, 5, "Go Home (Muszyna)", "23-12-2025", "Muszyna, Poland", BigDecimal.valueOf(35.00)));
 
         System.out.println("Initial activities inserted successfully.");
     }
@@ -91,7 +95,7 @@ public enum ActivitiesDAOsql {
                 a.setActivityId(rs.getInt("activityId"));
                 a.setTripId(rs.getInt("tripId"));
                 a.setName(rs.getString("name"));
-                a.setActivityDate(rs.getDate("activityDate"));
+                a.setActivityDate(rs.getString("activityDate"));
                 a.setLocation(rs.getString("location"));
                 a.setCost(rs.getBigDecimal("cost"));
                 activities.add(a);
@@ -114,7 +118,7 @@ public enum ActivitiesDAOsql {
                         rs.getInt("activityId"),
                         rs.getInt("tripId"),
                         rs.getString("name"),
-                        rs.getDate("activityDate"),
+                        rs.getString("activityDate"),
                         rs.getString("location"),
                         rs.getBigDecimal("cost")
                 );
@@ -141,7 +145,7 @@ public enum ActivitiesDAOsql {
 
             stmt.setInt(1, activity.getTripId());
             stmt.setString(2, activity.getName());
-            stmt.setDate(3, activity.getActivityDate());
+            stmt.setString(3, activity.getActivityDate());
             stmt.setString(4, activity.getLocation());
             stmt.setBigDecimal(5, activity.getCost());
 
@@ -193,13 +197,13 @@ public enum ActivitiesDAOsql {
             // Use existing values if new values are null
             int tripId = (updatedActivity.getTripId() > 0) ? updatedActivity.getTripId() : existingActivity.getTripId();
             String name = (updatedActivity.getName() != null) ? updatedActivity.getName() : existingActivity.getName();
-            Date activityDate = (updatedActivity.getActivityDate() != null) ? updatedActivity.getActivityDate() : existingActivity.getActivityDate();
+            String activityDate = (updatedActivity.getActivityDate() != null) ? updatedActivity.getActivityDate() : existingActivity.getActivityDate();
             String location = (updatedActivity.getLocation() != null) ? updatedActivity.getLocation() : existingActivity.getLocation();
             BigDecimal cost = (updatedActivity.getCost() != null) ? updatedActivity.getCost() : existingActivity.getCost();
 
             stmt.setInt(1, tripId);
             stmt.setString(2, name);
-            stmt.setDate(3, activityDate);
+            stmt.setString(3, activityDate);
             stmt.setString(4, location);
             stmt.setBigDecimal(5, cost);
             stmt.setInt(6, activityId);

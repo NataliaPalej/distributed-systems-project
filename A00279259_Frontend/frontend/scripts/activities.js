@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const tripId = getTripIdFromURL();
     if (tripId) {
+		fetchTripDetails(tripId);
         fetchActivities(tripId);
     } else {
         console.error("No tripId found in URL");
@@ -11,6 +12,16 @@ document.addEventListener("DOMContentLoaded", function () {
 function getTripIdFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get("tripId");
+}
+
+// Fetch destination name 
+function fetchTripDetails(tripId) {
+    fetch(`http://localhost:8080/A00279259_Backend/rest/trips/${tripId}`)
+        .then(response => response.json())
+        .then(trip => {
+            document.querySelector("h2").innerHTML = `Activities in <span class="destination-highlight">${trip.destination}</span>`;
+        })
+        .catch(error => console.error("Error fetching trip details:", error));
 }
 
 // Fetch activities for selected trip
@@ -33,16 +44,16 @@ function displayActivities(activities,) {
     }
     
     // Sort activities by date 
-    activities.sort((a, b) => new Date(a.activityDate) - new Date(b.activityDate));
+    activities.sort((a, b) => new Date(a.activityDate.split("-").reverse().join("-")) - new Date(b.activityDate.split("-").reverse().join("-")));
 
     activities.forEach(activity => {
 		// Get folder name based on location
         const folderName = getFolderName(activity.location); 
-        console.log("folderName: ", folderName);
+        // console.log("folderName: ", folderName);
         
         // Generate activity image name
         const activityImageName = getActivityImageName(activity.name); 
-        console.log("activityImageName: ", activityImageName);
+        // console.log("activityImageName: ", activityImageName);
         
         const activityCard = document.createElement("div");
         activityCard.classList.add("activity-card");
@@ -55,7 +66,7 @@ function displayActivities(activities,) {
             </div>
             <div class="activity-info">
                 <h3>${activity.name}</h3>
-                <p><strong>Date:</strong> ${formatDate(activity.activityDate)}</p>
+                <p><strong>Date:</strong> ${(activity.activityDate)}</p>
                 <p><strong>Location:</strong> ${activity.location}</p>
                 <p><strong>Cost:</strong> €${activity.cost ? activity.cost.toFixed(2) : "0.00"}</p>
             </div>
@@ -63,15 +74,6 @@ function displayActivities(activities,) {
 
         activitiesList.appendChild(activityCard);
     });
-}
-
-// Format date (DD-MM-YYYY)
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
 }
 
 function getActivityImageName(activityName) {
@@ -103,6 +105,7 @@ function getFolderName(location) {
         "Agia Roumeli, Crete, Greece": "crete",
         "Krakow, Poland": "krakow",
         "Oswiecim, Poland" : "krakow",
+        "Muszyna, Poland" : "krakow",
         "Wieliczka, Poland" : "krakow",
         "New York, USA": "new-york",
         "Jersey City, USA": "new-york",

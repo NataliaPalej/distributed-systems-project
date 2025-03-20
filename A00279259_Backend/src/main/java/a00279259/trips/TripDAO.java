@@ -1,7 +1,6 @@
 package a00279259.trips;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
@@ -18,8 +17,8 @@ public enum TripDAO {
 		Trip t1 = new Trip();
 		t1.setTripId(1);
 	    t1.setDestination("New York, USA");
-	    t1.setStartDate(Date.valueOf("2025-01-14"));
-	    t1.setEndDate(Date.valueOf("2025-01-20"));
+	    t1.setStartDate("2025-01-14");
+	    t1.setEndDate("2025-01-20");
 	    t1.setBudget(BigDecimal.valueOf(2500.00));
 	    t1.setNotes("Exploring NYC, food tour and Timesquare");
 	    
@@ -28,8 +27,8 @@ public enum TripDAO {
 	    Trip t2 = new Trip();
 	    t2.setTripId(2);
 	    t2.setDestination("Chania, Crete, Greece");
-	    t2.setStartDate(Date.valueOf("2025-09-18"));
-	    t2.setEndDate(Date.valueOf("2025-09-28"));
+	    t2.setStartDate("2025-09-18");
+	    t2.setEndDate("2025-09-28");
 	    t2.setBudget(BigDecimal.valueOf(2000.00));
 	    t2.setNotes("Chilling on the beach, visit Samaria Gorge.");
 
@@ -38,8 +37,8 @@ public enum TripDAO {
 	    Trip t3 = new Trip();
 	    t3.setTripId(3);
 	    t3.setDestination("Santorini, Greece");
-	    t3.setStartDate(Date.valueOf("2025-09-15"));
-	    t3.setEndDate(Date.valueOf("2025-09-18"));
+	    t3.setStartDate("2025-09-15");
+	    t3.setEndDate("2025-09-18");
 	    t3.setBudget(BigDecimal.valueOf(1500.00));
 	    t3.setNotes("Sunset views, volcano tour and buggie adventure.");
 
@@ -48,8 +47,8 @@ public enum TripDAO {
 	    Trip t4 = new Trip();
 	    t4.setTripId(4);
 	    t4.setDestination("Bali, Indonesia");
-	    t4.setStartDate(Date.valueOf("2025-06-06"));
-	    t4.setEndDate(Date.valueOf("2025-06-17"));
+	    t4.setStartDate("2025-06-06");
+	    t4.setEndDate("2025-06-17");
 	    t4.setBudget(BigDecimal.valueOf(2700.00));
 	    t4.setNotes("Temple visits, rice terraces and scuba diving.");
 
@@ -58,8 +57,8 @@ public enum TripDAO {
 	    Trip t5 = new Trip();
 	    t5.setTripId(5);
 	    t5.setDestination("Krakow, Poland");
-	    t5.setStartDate(Date.valueOf("2025-12-20"));
-	    t5.setEndDate(Date.valueOf("2026-01-02"));
+	    t5.setStartDate("2025-12-20");
+	    t5.setEndDate("2026-01-02");
 	    t5.setBudget(BigDecimal.valueOf(1500.00));
 	    t5.setNotes("Exploring old town, Auschwitz tour and visit home");
 	
@@ -91,7 +90,6 @@ public enum TripDAO {
     }
 	
 	// Update existing trip by ID
-	@SuppressWarnings("null")
 	public Trip updateTrip(int id, Trip updatedTrip) {
 		// Check if trip exists
         if (!tripsMap.containsKey(id)) {
@@ -103,11 +101,19 @@ public enum TripDAO {
         Trip existingTrip = tripsMap.get(id);
         
 		// Update trip details 
-        if (updatedTrip.getDestination() != null && updatedTrip.getStartDate() != null && updatedTrip.getEndDate() != null && updatedTrip.getBudget() != null && updatedTrip.getNotes() != null) {
+        if (updatedTrip.getDestination() != null) {
         	existingTrip.setDestination(updatedTrip.getDestination());
+        }
+        if (updatedTrip.getStartDate() != null) {
         	existingTrip.setStartDate(updatedTrip.getStartDate());
+        }
+        if (updatedTrip.getEndDate() != null) {
         	existingTrip.setEndDate(updatedTrip.getEndDate());
+        }
+        if (updatedTrip.getBudget() != null) {
         	existingTrip.setBudget(updatedTrip.getBudget());
+        }
+        if (updatedTrip.getNotes() != null) {
         	existingTrip.setNotes(updatedTrip.getNotes());
         }
         
