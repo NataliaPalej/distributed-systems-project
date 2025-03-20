@@ -52,28 +52,28 @@ public enum ActivitiesDAOsql {
     
     private void insertInitialActivities() {
     	// NYC Activities
-    	addActivity(new Activities(1, "Visit Statue of Liberty and Ellis Island", Date.valueOf("2025-06-10"), "New York, USA", BigDecimal.valueOf(59.95)));
-        addActivity(new Activities(1, "Visit Times Square", Date.valueOf("2025-06-11"), "New York, USA", BigDecimal.valueOf(0)));
-        addActivity(new Activities(1, "Visit Rockefeller Center", Date.valueOf("2025-06-12"), "New York, USA", BigDecimal.valueOf(25.00)));
+    	addActivity(new Activities(1, "Visit Statue of Liberty and Ellis Island", Date.valueOf("2025-01-15"), "Jersey City, USA", BigDecimal.valueOf(59.95)));
+        addActivity(new Activities(1, "Visit Times Square", Date.valueOf("2025-01-16"), "Manhattan, New York, USA", BigDecimal.valueOf(0)));
+        addActivity(new Activities(1, "Visit Rockefeller Center", Date.valueOf("2025-01-17"), "45 Rockefeller Plaza, New York, USA", BigDecimal.valueOf(25.00)));
 
         // Crete Activities
-        addActivity(new Activities(2, "Visit Samaria Gorge", Date.valueOf("2025-09-19"), "Chania, Crete, Greece", BigDecimal.valueOf(45.00)));
+        addActivity(new Activities(2, "Visit Samaria Gorge", Date.valueOf("2025-09-19"), "Agia Roumeli, Crete, Greece", BigDecimal.valueOf(45.00)));
         addActivity(new Activities(2, "Visit Sainta Limania", Date.valueOf("2025-09-20"), "Chania, Crete, Greece", BigDecimal.valueOf(15.00)));
-        addActivity(new Activities(2, "Visit Balos", Date.valueOf("2025-09-21"), "Chania, Crete, Greece", BigDecimal.valueOf(30.00)));
+        addActivity(new Activities(2, "Visit Balos", Date.valueOf("2025-09-21"), "Balos, Crete, Greece", BigDecimal.valueOf(30.00)));
 
         // Santorini Activities
-        addActivity(new Activities(3, "Visit Oia", Date.valueOf("2025-07-15"), "Santorini, Greece", BigDecimal.valueOf(0)));
-        addActivity(new Activities(3, "Visit Thera", Date.valueOf("2025-07-16"), "Santorini, Greece", BigDecimal.valueOf(0)));
-        addActivity(new Activities(3, "Visit Red Beach", Date.valueOf("2025-07-17"), "Santorini, Greece", BigDecimal.valueOf(0)));
+        addActivity(new Activities(3, "Visit Oia", Date.valueOf("2025-09-15"), "Oia, Santorini, Greece", BigDecimal.valueOf(0)));
+        addActivity(new Activities(3, "Visit Thera", Date.valueOf("2025-09-16"), "Thera, Santorini, Greece", BigDecimal.valueOf(0)));
+        addActivity(new Activities(3, "Visit Red Beach", Date.valueOf("2025-09-17"), "Akrotiri, Santorini, Greece", BigDecimal.valueOf(0)));
 
         // Bali Activities
-        addActivity(new Activities(4, "Explore Ubud Monkey Forest", Date.valueOf("2025-08-10"), "Ubud, Bali, Indonesia", BigDecimal.valueOf(10.00)));
-        addActivity(new Activities(4, "Visit Tanah Lot Temple", Date.valueOf("2025-08-11"), "Bali, Indonesia", BigDecimal.valueOf(6.00)));
-        addActivity(new Activities(4, "Experience Bali Swing", Date.valueOf("2025-08-12"), "Bali, Indonesia", BigDecimal.valueOf(60.00)));
+        addActivity(new Activities(4, "Explore Ubud Monkey Forest", Date.valueOf("2025-06-07"), "Ubud, Bali, Indonesia", BigDecimal.valueOf(10.00)));
+        addActivity(new Activities(4, "Visit Tanah Lot Temple", Date.valueOf("2025-06-08"), "Tabanan Regency, Bali, Indonesia", BigDecimal.valueOf(6.00)));
+        addActivity(new Activities(4, "Experience Bali Swing", Date.valueOf("2025-06-09"), "Badung Regency, Bali, Indonesia", BigDecimal.valueOf(60.00)));
 
         // Krakow Activities
         addActivity(new Activities(5, "Visit Main Square", Date.valueOf("2025-12-21"), "Krakow, Poland", BigDecimal.valueOf(0)));
-        addActivity(new Activities(5, "Visit Auschwitz", Date.valueOf("2025-12-22"), "Oświęcim, Poland", BigDecimal.valueOf(80.00)));
+        addActivity(new Activities(5, "Visit Auschwitz", Date.valueOf("2025-12-22"), "Oswiecim, Poland", BigDecimal.valueOf(80.00)));
         addActivity(new Activities(5, "Visit Salt Mine", Date.valueOf("2025-12-23"), "Wieliczka, Poland", BigDecimal.valueOf(50.00)));
 
         System.out.println("Initial activities inserted successfully.");

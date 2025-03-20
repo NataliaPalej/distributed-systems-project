@@ -3,27 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trips</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Natalia Palej A00279259</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/trips.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    <h1>Trips</h1>
-    <ul id="trips-list"></ul>
+    <header class="background">
+        <h1>Explore Your Next Adventure</h1>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Trips</a></li>
+        </ul>
+    </nav>
+
     
     
-    <form id="trip-form">
-	    <input type="text" id="destination" placeholder="Destination" required>
-	    <input type="date" id="startDate" required>
-	    <input type="date" id="endDate" required>
-	    <input type="number" id="budget" placeholder="Budget">
-	    <textarea id="notes" placeholder="Notes"></textarea>
-	    <button type="submit">Add Trip</button>
-	</form>
-   
-    
-    <script src="scripts/api.js"></script>
+    <footer>
+	    <p>&copy; 2025 Natalia Palej | A00279259 | <span class="footer-highlight">❤ Love for Trips</span> ✈️🌍</p>
+	    <p>Software Design with Artificial Intelligence for Cloud Computing</p>
+	</footer>
+
     <script src="scripts/trips.js"></script>
 </body>
-
 </html>

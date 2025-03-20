@@ -45,6 +45,11 @@ function displayTrips(trips) {
                 <p><strong>Start Date:</strong> ${formatDate(trip.startDate)}</p>
             </div>
         `;
+        
+        // Add event to open activities.html with tripId
+        tripCard.addEventListener("click", () => {
+            window.location.href = `activities.html?tripId=${trip.tripId}`;
+        });
 
         // Append to the appropriate section
         if (isPast) {
