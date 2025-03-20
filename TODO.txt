@@ -5,3 +5,8 @@
 -> edit ACTIVITY
 -> delete TRIP 
 -> delete ACTIVITY 
+
+
+
+Change Parsing to: 
+3. The client application will parses the response using XMLPullParser and outputs to the GUI" + "A tomcat server that responds to all of the HTTP requests GET/PUT/POST/DELETE"
