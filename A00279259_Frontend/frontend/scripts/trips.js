@@ -1,39 +1,63 @@
-document.addEventListener("DOMContentLoaded", async function () {
-    let tripsList = document.getElementById("trips-list");
+document.addEventListener("DOMContentLoaded", function () {
+    fetchTrips();
+});
 
-    let trips = await fetchTrips();
+function fetchTrips() {
+    fetch("http://localhost:8080/A00279259_Backend/rest/trips")
+        .then(response => response.json())
+        .then(data => displayTrips(data))
+        .catch(error => console.error("Error fetching trips:", error));
+}
+
+function displayTrips(trips) {
+	const upcomingTrips = document.getElementById("upcomingTrips");
+    const pastTrips = document.getElementById("pastTrips");
+	
+    // Clear previous list
+    upcomingTrips.innerHTML = "";
+    pastTrips.innerHTML = "";
+    
+    // Get todays date
+    const today = new Date();
+    
+    // Sort trips by startDate 
+    trips.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+
     trips.forEach(trip => {
-        let li = document.createElement("li");
-        li.textContent = `${trip.destination} - ${trip.startDate} to ${trip.endDate}`;
-        tripsList.appendChild(li);
-    });
-});
+        const tripCard = document.createElement("div");
+        tripCard.classList.add("trip-card");
 
-document.getElementById("trip-form").addEventListener("submit", async function (event) {
-    event.preventDefault();
+        // Convert startDate to Date object
+        const tripDate = new Date(trip.startDate);
 
-    let newTrip = {
-        destination: document.getElementById("destination").value,
-        startDate: document.getElementById("startDate").value,
-        endDate: document.getElementById("endDate").value,
-        budget: document.getElementById("budget").value,
-        notes: document.getElementById("notes").value
-    };
+        // Check if the trip is in past
+        const isPast = tripDate < today;
 
-    try {
-        let response = await fetch(`${API_URL}/trips`, {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams(newTrip)
-        });
+        tripCard.innerHTML = `
+            <div class="trip-image-container ${isPast ? 'past-trip' : ''}">
+                <img src="images/${trip.destination.toLowerCase().replace(/\s+/g, '-')}.jpg" alt="${trip.destination}">
+                ${isPast ? '<div class="trip-overlay">COMPLETED</div>' : ''}
+            </div>
+            <div class="trip-info">
+                <h3>${trip.destination}</h3>
+                <p><strong>Start Date:</strong> ${formatDate(trip.startDate)}</p>
+            </div>
+        `;
 
-        if (response.ok) {
-            alert("Trip added successfully!");
-            window.location.reload();
+        // Append to the appropriate section
+        if (isPast) {
+            pastTrips.appendChild(tripCard);
         } else {
-            alert("Error adding trip.");
+            upcomingTrips.appendChild(tripCard);
         }
-    } catch (error) {
-        console.error("Error:", error);
-    }
-});
+    });
+}
+
+// Format date to DD-MM-YYYY
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+}
