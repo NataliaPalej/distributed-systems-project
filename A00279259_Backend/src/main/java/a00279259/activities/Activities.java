@@ -26,6 +26,14 @@ public class Activities {
         this.cost = cost;
     }
 
+    public Activities(int tripId, String name, Date activityDate, String location, BigDecimal cost) {
+        this.tripId = tripId;
+        this.name = name;
+        this.activityDate = activityDate;
+        this.location = location;
+        this.cost = cost;
+    }
+    
 	public int getActivityId() {
 		return activityId;
 	}

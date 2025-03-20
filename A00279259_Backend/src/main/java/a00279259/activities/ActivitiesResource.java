@@ -1,14 +1,11 @@
 package a00279259.activities;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -34,75 +31,59 @@ public class ActivitiesResource {
 	@GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Path("{activityId}")
-    public Activities getActivity(@PathParam("activityId") String id) {
-		System.out.println("getActivity(id) :: called");
-		return ActivitiesDAOsql.instance.getActivity(Integer.parseInt(id));
-    }
-	
-	@GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Path("trip/{tripId}")
-    public List<Activities> getActivitiesByTrip(@PathParam("tripId") String tripId) {
-		System.out.println("getActivity(id) :: called");
-		return ActivitiesDAOsql.instance.getActivitiesByTrip(Integer.parseInt(tripId));
+    public Activities getActivity(@PathParam("activityId") String activityId) {
+		return ActivitiesDAOsql.instance.getActivity(Integer.parseInt(activityId));
     }
 	
 	@POST
-    @Produces(MediaType.TEXT_HTML)
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addActivity(
-            @FormParam("tripId") int tripId,
-            @FormParam("name") String name,
-            @FormParam("activityDate") Date activityDate,
-            @FormParam("location") String location,
-            @FormParam("cost") BigDecimal cost,
-            @Context HttpServletResponse servletResponse) throws IOException {
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_HTML})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public void addActivity(Activities activity, @Context HttpServletResponse servletResponse) throws IOException {
 
-        // Set id to "0" as its auto-generated and handled by ActivitiesDAO
-        Activities newActivity = new Activities(0, tripId, name, activityDate, location, cost);
-        ActivitiesDAOsql.instance.addActivity(newActivity);
-
-        System.out.println("New activity added successfully.");
-        servletResponse.sendRedirect("../addActivity.html");
+		// Check if tripID exists before insert 
+		if (activity.getTripId() <= 0) {
+	        System.out.println("Error: invalid tripId " + activity.getTripId() + ".");
+	        servletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Error: tripId is invalid or missing.");
+	        return;
+	    }
+		
+		Activities newActivity = ActivitiesDAOsql.instance.addActivity(activity);
+		
+		if (newActivity == null) {
+	        System.out.println("Error inserting activity.");
+	        servletResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error inserting activity.");
+	        return;
+	    }
     }
 	
 	// @XmlType(propOrder = { "activityId", "tripId", "name", "activityDate", "location", "cost" })
 	@PUT
 	@Path("{activityId}")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Activities updateTrip(
-			@PathParam("activityId") int activityId,
-			@FormParam("tripId") int tripId,
-			@FormParam("name") String name,
-			@FormParam("activityDate") Date activityDate,
-			@FormParam("location") String location,
-			@FormParam("cost") BigDecimal cost) {
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_HTML})
+	public Activities updateActivity(@PathParam("activityId") int activityId, Activities updatedActivity) {
 		
 		Activities existingActivity = ActivitiesDAOsql.instance.getActivity(activityId);
 		
 		if (existingActivity == null) {
-			System.out.println("Trip with ID " + tripId + " not found.");
+			System.out.println("\nActivity with ID " + activityId + " not found.\n");
 			return null;
 		}
-
-		// Update only not null fields
-		if (activityId > 0) existingActivity.setActivityId(activityId);
-		if (tripId > 0) existingActivity.setTripId(tripId);
-		if (name != null) existingActivity.setName(name);
-		if (activityDate != null) existingActivity.setActivityDate(activityDate);
-		if (location != null) existingActivity.setLocation(location);
-		if (cost != null) existingActivity.setCost(cost);
 		
-		Activities updatedActivity = ActivitiesDAOsql.instance.updateActivity(activityId, existingActivity);
-		System.out.println("Trip with ID " + tripId + " updated successfully.");
-		return updatedActivity;
+		// Update only not null fields
+		existingActivity.setTripId(updatedActivity.getTripId() > 0 ? updatedActivity.getTripId() : existingActivity.getTripId());
+		existingActivity.setName(updatedActivity.getName() != null ? updatedActivity.getName() : existingActivity.getName());
+		existingActivity.setActivityDate(updatedActivity.getActivityDate() != null ? updatedActivity.getActivityDate() : existingActivity.getActivityDate());
+		existingActivity.setLocation(updatedActivity.getLocation() != null ? updatedActivity.getLocation() : existingActivity.getLocation());
+		existingActivity.setCost(updatedActivity.getCost() != null ? updatedActivity.getCost() : existingActivity.getCost());
+		
+		Activities updatedActivityObj = ActivitiesDAOsql.instance.updateActivity(activityId, existingActivity);
+		return updatedActivityObj;
 	}
 	
 	@DELETE
     @Path("{activityId}")
     public Activities deleteActivity(@PathParam("activityId") String id) {
-        System.out.println("Activity with ID: " + id + " was deleted successfully.");
 		return ActivitiesDAOsql.instance.deleteActivity(Integer.parseInt(id));
     }
 

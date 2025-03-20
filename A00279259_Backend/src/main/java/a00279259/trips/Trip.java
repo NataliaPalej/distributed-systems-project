@@ -2,9 +2,12 @@ package a00279259.trips;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import a00279259.activities.Activities;
 
 /**
  * Annotations @XmlRootElement and @XmlType are allowing for the communication with module object
@@ -19,8 +22,17 @@ public class Trip {
 	private Date startDate;
 	private Date endDate;
 	private BigDecimal budget;
+	private List<Activities> activities;
 	
 	public Trip() {}
+	
+	public Trip(String destination, Date startDate, Date endDate, BigDecimal budget, String notes) {
+        this.destination = destination;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.budget = budget;
+        this.notes = notes;
+    }
 	
 	public Trip(int tripId, String destination, Date startDate, Date endDate, BigDecimal budget, String notes) {
         this.tripId = tripId;
@@ -29,6 +41,14 @@ public class Trip {
         this.endDate = endDate;
         this.budget = budget;
         this.notes = notes;
+    }
+	
+	public List<Activities> getActivities() {
+        return activities;
+    }
+	
+	public void setActivities(List<Activities> activities) {
+        this.activities = activities;
     }
 	
 	public int getTripId() {

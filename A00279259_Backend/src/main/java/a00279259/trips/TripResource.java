@@ -1,14 +1,12 @@
 package a00279259.trips;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -19,6 +17,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import a00279259.TripDAOsql;
+import a00279259.activities.Activities;
 
 // http://localhost:8080/A00279259_Backend/rest/trips
 @Path("/trips")
@@ -33,46 +32,38 @@ public class TripResource {
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("{tripId}")
-	public Trip getTrip(@PathParam("tripId") String id){
-		return TripDAOsql.instance.getTrip(Integer.parseInt(id));
+	public Trip getTrip(@PathParam("tripId") String tripId){
+		return TripDAOsql.instance.getTrip(Integer.parseInt(tripId));
 	}
 	
+	@GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("{tripId}/activities")
+    public List<Activities> getActivitiesByTrip(@PathParam("tripId") String tripId) {
+		return TripDAOsql.instance.getActivitiesByTrip(Integer.parseInt(tripId));
+    }
+	
 	@POST
-	@Produces(MediaType.TEXT_HTML)
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void addTrip(
-			@FormParam("destination") String destination,
-			@FormParam("startDate") Date startDate,
-			@FormParam("endDate") Date endDate,
-			@FormParam("budget") BigDecimal budget,
-			@FormParam("notes") String notes,
-			@Context HttpServletResponse servletResponse) throws IOException {
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_HTML})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	public void addTrip(Trip trip, @Context HttpServletResponse servletResponse) throws IOException {
 		
-		Trip newTrip = new Trip();
-		newTrip.setDestination(destination);
-		newTrip.setStartDate(startDate);
-		newTrip.setEndDate(endDate);
-		newTrip.setBudget(budget);
-		newTrip.setNotes(notes);
+		Trip newTrip = TripDAOsql.instance.addTrip(trip);
 		
-		TripDAOsql.instance.addTrip(newTrip);
+		if (newTrip == null) {
+	        System.out.println("Error inserting trip.");
+	        servletResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error inserting trip.");
+	        return;
+	    }
 		
-		System.out.println("New Book added successfully.");
-		
-		servletResponse.sendRedirect("../addTrip.html");
+//		servletResponse.sendRedirect("../addTrip.html");
 	}
 	
 	@PUT
 	@Path("{tripId}")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Trip updateTrip(
-			@PathParam("tripId") int tripId,
-			@FormParam("destination") String destination,
-			@FormParam("startDate") Date startDate,
-			@FormParam("endDate") Date endDate,
-			@FormParam("budget") BigDecimal budget,
-			@FormParam("notes") String notes) {
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_HTML})
+	public Trip updateTrip(@PathParam("tripId") int tripId, Trip updatedTrip) throws SQLException {
 		
 		Trip existingTrip = TripDAOsql.instance.getTrip(tripId);
 		
@@ -82,15 +73,15 @@ public class TripResource {
 		}
 
 		// Update only not null fields
-		if (destination != null) existingTrip.setDestination(destination);
-		if (startDate != null) existingTrip.setStartDate(startDate);
-		if (endDate != null) existingTrip.setEndDate(endDate);
-		if (budget != null) existingTrip.setBudget(budget);
-		if (notes != null) existingTrip.setNotes(notes);
-		
-		Trip updatedTrip = TripDAOsql.instance.editTrip(tripId, existingTrip);
-		System.out.println("Trip with ID " + tripId + " updated successfully.");
-		return updatedTrip;
+		existingTrip.setDestination(updatedTrip.getDestination() != null ? updatedTrip.getDestination() : existingTrip.getDestination());
+	    existingTrip.setStartDate(updatedTrip.getStartDate() != null ? updatedTrip.getStartDate() : existingTrip.getStartDate());
+	    existingTrip.setEndDate(updatedTrip.getEndDate() != null ? updatedTrip.getEndDate() : existingTrip.getEndDate());
+	    existingTrip.setBudget(updatedTrip.getBudget() != null ? updatedTrip.getBudget() : existingTrip.getBudget());
+	    existingTrip.setNotes(updatedTrip.getNotes() != null ? updatedTrip.getNotes() : existingTrip.getNotes());
+
+	    Trip updatedTripObj = TripDAOsql.instance.updateTrip(tripId, existingTrip);
+	    
+	    return updatedTripObj;
 	}
 	
 	@DELETE

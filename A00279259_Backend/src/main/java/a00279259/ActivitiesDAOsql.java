@@ -9,29 +9,32 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import a00279259.activities.Activities;
+import a00279259.trips.Trip;
 
 // http://localhost:8080/a00279259/rest/activities
 public enum ActivitiesDAOsql {
 	instance;
 	
 	private Connection connection;
+	private Map<Integer, Activities> activitiesMap = new HashMap<Integer, Activities>();
 	
 	// Initialize DB connection
     private ActivitiesDAOsql() {
         try {
             Class.forName("org.hsqldb.jdbcDriver");
             connection = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/oneDB", "SA", "Passw0rd");
-            initializeActivities();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
     // Initialize activities data in activities db
-    private void initializeActivities() {
+    void initializeActivities() {
         try (PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) FROM activities")) {
             ResultSet rs = stmt.executeQuery();
             rs.next();
@@ -48,44 +51,32 @@ public enum ActivitiesDAOsql {
     }
     
     private void insertInitialActivities() {
-        String sql = "INSERT INTO activities (tripId, name, activityDate, location, cost) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            // NYC Activities
-            addActivity(stmt, 1, "Visit Statue of Liberty and Ellis Island", "2025-06-10", "New York, USA", 59.95);
-            addActivity(stmt, 1, "Visit Times Square", "2025-06-11", "New York, USA", 0);
-            addActivity(stmt, 1, "Visit Rockefeller Center", "2025-06-12", "New York, USA", 25.00);
+    	// NYC Activities
+    	addActivity(new Activities(1, "Visit Statue of Liberty and Ellis Island", Date.valueOf("2025-06-10"), "New York, USA", BigDecimal.valueOf(59.95)));
+        addActivity(new Activities(1, "Visit Times Square", Date.valueOf("2025-06-11"), "New York, USA", BigDecimal.valueOf(0)));
+        addActivity(new Activities(1, "Visit Rockefeller Center", Date.valueOf("2025-06-12"), "New York, USA", BigDecimal.valueOf(25.00)));
 
-            // Crete Activities
-            addActivity(stmt, 2, "Visit Samaria Gorge", "2025-09-19", "Chania, Crete, Greece", 45.00);
-            addActivity(stmt, 2, "Visit Sainta Limania", "2025-09-20", "Chania, Crete, Greece", 15.00);
-            addActivity(stmt, 2, "Visit Balos", "2025-09-21", "Chania, Crete, Greece", 30.00);
+        // Crete Activities
+        addActivity(new Activities(2, "Visit Samaria Gorge", Date.valueOf("2025-09-19"), "Chania, Crete, Greece", BigDecimal.valueOf(45.00)));
+        addActivity(new Activities(2, "Visit Sainta Limania", Date.valueOf("2025-09-20"), "Chania, Crete, Greece", BigDecimal.valueOf(15.00)));
+        addActivity(new Activities(2, "Visit Balos", Date.valueOf("2025-09-21"), "Chania, Crete, Greece", BigDecimal.valueOf(30.00)));
 
-            // Santorini Activities
-            addActivity(stmt, 3, "Visit Oia", "2025-07-15", "Santorini, Greece", 0);
-            addActivity(stmt, 3, "Visit Thera", "2025-07-16", "Santorini, Greece", 0);
-            addActivity(stmt, 3, "Visit Red Beach", "2025-07-17", "Santorini, Greece", 0);
+        // Santorini Activities
+        addActivity(new Activities(3, "Visit Oia", Date.valueOf("2025-07-15"), "Santorini, Greece", BigDecimal.valueOf(0)));
+        addActivity(new Activities(3, "Visit Thera", Date.valueOf("2025-07-16"), "Santorini, Greece", BigDecimal.valueOf(0)));
+        addActivity(new Activities(3, "Visit Red Beach", Date.valueOf("2025-07-17"), "Santorini, Greece", BigDecimal.valueOf(0)));
 
-            // Bali Activities
-            addActivity(stmt, 4, "Explore Ubud Monkey Forest", "2025-08-10", "Ubud, Bali, Indonesia", 10.00);
-            addActivity(stmt, 4, "Visit Tanah Lot Temple", "2025-08-11", "Bali, Indonesia", 6.00);
-            addActivity(stmt, 4, "Experience Bali Swing", "2025-08-12", "Bali, Indonesia", 60.00);
+        // Bali Activities
+        addActivity(new Activities(4, "Explore Ubud Monkey Forest", Date.valueOf("2025-08-10"), "Ubud, Bali, Indonesia", BigDecimal.valueOf(10.00)));
+        addActivity(new Activities(4, "Visit Tanah Lot Temple", Date.valueOf("2025-08-11"), "Bali, Indonesia", BigDecimal.valueOf(6.00)));
+        addActivity(new Activities(4, "Experience Bali Swing", Date.valueOf("2025-08-12"), "Bali, Indonesia", BigDecimal.valueOf(60.00)));
 
-            // Krakow Activities
-            addActivity(stmt, 5, "Visit Main Square", "2025-12-21", "Krakow, Poland", 0);
-            addActivity(stmt, 5, "Visit Auschwitz", "2025-12-22", "Oświęcim, Poland", 80.00);
-            addActivity(stmt, 5, "Visit Salt Mine", "2025-12-23", "Wieliczka, Poland", 50.00);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private void addActivity(PreparedStatement stmt, int tripId, String name, String date, String location, double cost) throws SQLException {
-        stmt.setInt(1, tripId);
-        stmt.setString(2, name);
-        stmt.setDate(3, Date.valueOf(date));
-        stmt.setString(4, location);
-        stmt.setBigDecimal(5, BigDecimal.valueOf(cost));
-        stmt.executeUpdate();
+        // Krakow Activities
+        addActivity(new Activities(5, "Visit Main Square", Date.valueOf("2025-12-21"), "Krakow, Poland", BigDecimal.valueOf(0)));
+        addActivity(new Activities(5, "Visit Auschwitz", Date.valueOf("2025-12-22"), "Oświęcim, Poland", BigDecimal.valueOf(80.00)));
+        addActivity(new Activities(5, "Visit Salt Mine", Date.valueOf("2025-12-23"), "Wieliczka, Poland", BigDecimal.valueOf(50.00)));
+
+        System.out.println("Initial activities inserted successfully.");
     }
     
     // Get all activities
@@ -95,54 +86,27 @@ public enum ActivitiesDAOsql {
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM activities")) {
 
-            while (rs.next()) {
-                Activities a = new Activities(
-                        rs.getInt("activityId"),
-                        rs.getInt("tripId"),
-                        rs.getString("name"),
-                        rs.getDate("activityDate"),
-                        rs.getString("location"),
-                        rs.getBigDecimal("cost")
-                );
+        	while (rs.next()) {
+                Activities a = new Activities();
+                a.setActivityId(rs.getInt("activityId"));
+                a.setTripId(rs.getInt("tripId"));
+                a.setName(rs.getString("name"));
+                a.setActivityDate(rs.getDate("activityDate"));
+                a.setLocation(rs.getString("location"));
+                a.setCost(rs.getBigDecimal("cost"));
                 activities.add(a);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return activities;
-    }
-    
-    // Get activities for specific trip
-    public List<Activities> getActivitiesByTrip(int tripId) {
-        List<Activities> activities = new ArrayList<>();
-
-        try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM activities WHERE tripId = ?")) {
-            stmt.setInt(1, tripId);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                Activities a = new Activities(
-                        rs.getInt("activityId"),
-                        rs.getInt("tripId"),
-                        rs.getString("name"),
-                        rs.getDate("activityDate"),
-                        rs.getString("location"),
-                        rs.getBigDecimal("cost")
-                );
-                activities.add(a);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+        System.out.println("getActivities() :: called");
         return activities;
     }
     
     // Get activity by ID
-    public Activities getActivity(int id) {
+    public Activities getActivity(int activityId) {
         try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM activities WHERE activityId = ?")) {
-            stmt.setInt(1, id);
+            stmt.setInt(1, activityId);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -158,11 +122,19 @@ public enum ActivitiesDAOsql {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("getActivity("+ activityId + ") :: called");
         return null;
     }
     
     // Add a new activity
     public Activities addActivity(Activities activity) {
+    	System.out.println("Adding activity for tripId: " + activity.getTripId());
+    	
+    	if (!tripExists(activity.getTripId())) {
+            System.out.println("Error: Trip with ID " + activity.getTripId() + " does not exist. Activity not added.");
+            return null;
+        }
+    	
         try (PreparedStatement stmt = connection.prepareStatement(
                 "INSERT INTO activities (tripId, name, activityDate, location, cost) VALUES (?, ?, ?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS)) {
@@ -174,6 +146,7 @@ public enum ActivitiesDAOsql {
             stmt.setBigDecimal(5, activity.getCost());
 
             int affectedRows = stmt.executeUpdate();
+            
             if (affectedRows == 0) {
                 throw new SQLException("Creating activity failed, no rows affected.");
             }
@@ -187,19 +160,33 @@ public enum ActivitiesDAOsql {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        System.out.println("New activity added successfully.\n\t" + activity);
         return activity;
     }
     
+    private boolean tripExists(int tripId) {
+    	try (PreparedStatement stmt = connection.prepareStatement("SELECT * from trips where tripId = ?")){
+    		stmt.setInt(1,  tripId);
+    		ResultSet rs = stmt.executeQuery();
+    		return rs.next();
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    		return false;
+    	}
+    }
+    
     // Update an existing activity
-    public Activities updateActivity(int id, Activities updatedActivity) {
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "UPDATE activities SET tripId = ?, name = ?, activityDate = ?, location = ?, cost = ? WHERE activityId = ?")) {
+    public Activities updateActivity(int activityId, Activities updatedActivity) {
+    	
+    	String sql = "UPDATE activities SET tripId = ?, name = ?, activityDate = ?, location = ?, cost = ? WHERE activityId = ?";
+		
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             // Check if the activity exists
-            Activities existingActivity = getActivity(id);
+            Activities existingActivity = getActivity(activityId);
+            System.out.println("existingActivity: " + existingActivity);
+            
             if (existingActivity == null) {
-                System.out.println("Activity with ID " + id + " not found.");
                 return null;
             }
 
@@ -215,14 +202,16 @@ public enum ActivitiesDAOsql {
             stmt.setDate(3, activityDate);
             stmt.setString(4, location);
             stmt.setBigDecimal(5, cost);
-            stmt.setInt(6, id);
+            stmt.setInt(6, activityId);
 
             int rowsUpdated = stmt.executeUpdate();
+      
             if (rowsUpdated > 0) {
-                System.out.println("Activity with ID " + id + " updated successfully.");
-                return getActivity(id);
+            	System.out.println("updatedActivity: " + updatedActivity);
+        		System.out.println("\nupdateActivity(" + activityId + ") :: updated successfully.\n");
+                return getActivity(activityId);
             } else {
-                System.out.println("Failed to update activity with ID " + id + ".");
+                System.out.println("\nFailed to update activity with ID " + activityId + ".\n");
                 return null;
             }
 
@@ -233,30 +222,21 @@ public enum ActivitiesDAOsql {
     }
     
     // Delete an activity by ID
-    public Activities deleteActivity(int id) {
-        Activities activityToDelete = getActivity(id);
-
-        if (activityToDelete == null) {
-            System.out.println("Activity with ID " + id + " not found.");
-            return null;
-        }
-
-        try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM activities WHERE activityId = ?")) {
-            stmt.setInt(1, id);
-            int affectedRows = stmt.executeUpdate();
+    public Activities deleteActivity(int activityId) {
+    	try (Statement stmt = connection.createStatement()) {
+            int affectedRows = stmt.executeUpdate("DELETE FROM activities WHERE activityId = " + activityId);
 
             if (affectedRows > 0) {
-                System.out.println("Activity with ID " + id + " deleted successfully.");
-                return activityToDelete;
+                System.out.println("deleteActivity(" + activityId + ") :: deleted successfully.");
+                return activitiesMap.remove(activityId);
             } else {
-                System.out.println("Failed to delete activity with ID " + id + ".");
+                System.out.println("Activity with ID " + activityId + " not found.");
                 return null;
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
-	
 }
