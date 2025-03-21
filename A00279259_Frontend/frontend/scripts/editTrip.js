@@ -21,7 +21,8 @@ function fetchTripDetails(tripId) {
     .then(xmlText => {
         const parser = new DOMParser();
         const xml = parser.parseFromString(xmlText, "application/xml");
-
+		
+		document.getElementById("tripId").value = xml.querySelector("tripId").textContent;
         document.getElementById("destination").value = xml.querySelector("destination").textContent;
         document.getElementById("startDate").value = xml.querySelector("startDate").textContent;
         document.getElementById("endDate").value = xml.querySelector("endDate").textContent;
@@ -36,7 +37,7 @@ function updateTrip() {
     const tripId = getTripIdFromURL();
     const tripData = `
         <trip>
-            <tripId>${tripId}</tripId>
+            <tripId>${document.getElementById("tripId").value}</tripId>
             <destination>${document.getElementById("destination").value}</destination>
             <startDate>${document.getElementById("startDate").value}</startDate>
             <endDate>${document.getElementById("endDate").value}</endDate>

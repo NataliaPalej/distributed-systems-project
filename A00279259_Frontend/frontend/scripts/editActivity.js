@@ -22,7 +22,9 @@ function fetchActivityDetails(activityId) {
         const parser = new DOMParser();
         const xml = parser.parseFromString(xmlText, "application/xml");
 
-		document.getElementById("tripId").value = xml.querySelector("tripId").textContent;
+        // Populate form fields
+        document.getElementById("activityId").value = xml.querySelector("activityId").textContent;
+        document.getElementById("tripId").value = xml.querySelector("tripId").textContent;
         document.getElementById("name").value = xml.querySelector("name").textContent;
         document.getElementById("activityDate").value = xml.querySelector("activityDate").textContent;
         document.getElementById("location").value = xml.querySelector("location").textContent;
@@ -37,7 +39,7 @@ function updateActivity() {
     const activityData = `
         <activity>
             <activityId>${activityId}</activityId>
-            <tripId>${tripId}</tripId>
+            <tripId>${document.getElementById("tripId").value}</tripId>
             <name>${document.getElementById("name").value}</name>
             <activityDate>${document.getElementById("activityDate").value}</activityDate>
             <location>${document.getElementById("location").value}</location>
@@ -52,7 +54,7 @@ function updateActivity() {
     .then(response => {
         if (response.ok) {
             alert("Activity updated successfully!");
-            window.location.href = `activities.html?tripId=${getTripIdFromActivity(activityId)}`;
+            window.location.href = `activities.html?tripId=${document.getElementById("tripId").value}`;
         } else {
             alert("Error updating activity.");
         }
@@ -62,14 +64,7 @@ function updateActivity() {
 
 // Cancel and go back to activities page
 function cancelEdit() {
-    window.location.href = `activities.html?tripId=${getTripIdFromActivity(getActivityIdFromURL())}`;
-}
-
-// Extract tripId from activityId (Assuming tripId is required for redirection)
-function getTripIdFromActivity(activityId) {
-    // This assumes a mapping of activity to trip is stored.
-    // If your API provides tripId in activity details, fetch it dynamically.
-    return new URLSearchParams(window.location.search).get("tripId") || "";
+    window.location.href = `activities.html?tripId=${document.getElementById("tripId").value}`;
 }
 
 /* Nav Bar Dropdown */

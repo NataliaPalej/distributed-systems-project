@@ -3,29 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Natalia Palej A00279259</title>
+    <title>Edit Activity | Natalia Palej A00279259</title>
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles/trips.css">
+    <link rel="stylesheet" href="styles/editActivity.css">
     <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="background">
-        <h1>Explore Your Next Adventure</h1>
+        <h1>Edit Activity</h1>
     </header>
 
     <!-- Navigation Bar -->
     <nav class="navbar">
         <a href="index.html">Home</a>
         <div class="dropdown">
-            <button class="dropbtn">Trips ▾</button>
+            <button class="dropbtn">Trips <i class="fa fa-caret-down"></i></button>
             <div class="dropdown-content" id="tripDropdown"></div>
         </div>
     </nav>
 
     <section class="form-container">
-        
+        <h2>Edit Activity</h2>
+        <form id="activityForm">
+            <label>Activity ID:</label>
+            <input type="text" id="activityId" disabled class="readonly-field">
+
+            <label>Trip ID:</label>
+            <input type="text" id="tripId" required>
+
+            <label>Activity Name:</label>
+            <input type="text" id="name" required>
+
+            <label>Activity Date:</label>
+            <input type="text" id="activityDate" placeholder="DD-MM-YYYY" required>
+
+            <label>Location:</label>
+            <input type="text" id="location" required>
+
+            <label>Cost (€):</label>
+            <input type="number" id="cost" step="0.01" required>
+
+            <div class="button-group">
+                <button type="button" class="update-btn" onclick="updateActivity()">Update</button>
+                <button type="button" class="cancel-btn" onclick="cancelEdit()">Cancel</button>
+            </div>
+        </form>
     </section>
     
     <footer>
@@ -33,6 +58,6 @@
 	    <p>Software Design with Artificial Intelligence for Cloud Computing</p>
 	</footer>
 
-    <script src="scripts/trips.js"></script>
+    <script src="scripts/editActivity.js"></script>
 </body>
 </html>
