@@ -114,6 +114,10 @@ function displayActivities(activities,) {
                 <p><strong>Date:</strong> ${(activity.activityDate)}</p>
                 <p><strong>Location:</strong> ${activity.location}</p>
                 <p><strong>Cost:</strong> \u20AC${parseFloat(activity.cost).toFixed(2)}</p>
+                <br>
+                <div class="activity-actions">
+                	<button class="edit-btn">Edit</button>
+            	</div>
            </div>
         `;
         
@@ -131,6 +135,12 @@ function displayActivities(activities,) {
         const deleteContainer = document.createElement("div");
         deleteContainer.classList.add("delete-container");
         deleteContainer.appendChild(deleteButton);
+        
+        const editButton = activityCard.querySelector(".edit-btn");
+        editButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            window.location.href = `editActivity.html?activityId=${activity.activityId}`;
+        });
 
         // Append delete btn inside activity img container
         const imageContainer = activityCard.querySelector(".activity-image-container");

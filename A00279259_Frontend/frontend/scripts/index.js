@@ -77,6 +77,10 @@ function displayTrips(trips) {
                 <p><strong>Budget:</strong> \u20AC${trip.budget}</p>
                 <br>
                 <p><strong>Notes:</strong> ${trip.notes}</p>
+                <br>
+                <div class="trip-actions">
+                	<button class="edit-btn">Edit</button>
+            	</div>
             </div>
         `;
         
@@ -96,6 +100,13 @@ function displayTrips(trips) {
         const deleteContainer = tripCard.querySelector(".delete-container");
         // Append delete btn
         deleteContainer.appendChild(deleteButton); 
+        
+        const editButton = tripCard.querySelector(".edit-btn");
+        editButton.addEventListener("click", (event) => {
+			// Prevents triggering the card click event
+            event.stopPropagation(); 
+            window.location.href = `trip.html?tripId=${trip.tripId}`;
+        });
 
         // Add on click event to open activities.html with specific tripId
         tripCard.addEventListener("click", () => {

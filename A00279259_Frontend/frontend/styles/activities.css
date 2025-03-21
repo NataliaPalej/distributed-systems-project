@@ -184,6 +184,36 @@ body {
     opacity: 1;
 }
 
+/* Edit Button */
+.edit-btn {
+    background-color: #FFD700; 
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.edit-btn:hover {
+    background-color: #FFC107;
+    color: #222;
+    transform: scale(1.05);
+}
+
+.activity-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
 /* Modal Styling */
 .modal {
     display: none;
