@@ -24,14 +24,22 @@ function parseTripsXML(xmlString) {
 
     let trips = [];
     for (let trip of tripElements) {
-        let tripId = trip.getElementsByTagName("tripId")[0].textContent;
-        let destination = trip.getElementsByTagName("destination")[0].textContent;
-        let startDate = trip.getElementsByTagName("startDate")[0].textContent;
-        let endDate = trip.getElementsByTagName("endDate")[0].textContent;
-        let budget = trip.getElementsByTagName("budget")[0].textContent;
-        let notes = trip.getElementsByTagName("notes")[0].textContent;
+        let tripId = trip.getElementsByTagName("tripId")[0]?.textContent;
+        let destination = trip.getElementsByTagName("destination")[0]?.textContent || "TBC";
+        let startDate = trip.getElementsByTagName("startDate")[0]?.textContent?.trim() !== "" 
+            ? trip.getElementsByTagName("startDate")[0].textContent 
+            : "TBC";
+        let endDate = trip.getElementsByTagName("endDate")[0]?.textContent?.trim() !== "" 
+            ? trip.getElementsByTagName("endDate")[0].textContent 
+            : "TBC";
+        let budget = trip.getElementsByTagName("budget")[0]?.textContent?.trim() !== "" 
+            ? trip.getElementsByTagName("budget")[0].textContent 
+            : "TBC";
+        let notes = trip.getElementsByTagName("notes")[0]?.textContent?.trim() !== "" 
+            ? trip.getElementsByTagName("notes")[0].textContent 
+            : "TBC";
 
-        trips.push({ tripId, destination, startDate, endDate, budget, notes});
+        trips.push({ tripId, destination, startDate, endDate, budget, notes });
     }
 
     return trips;

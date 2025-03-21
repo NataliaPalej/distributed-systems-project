@@ -1,4 +1,0 @@
-1. Create options in menu to 
--> add TRIP
--> add ACTIVITY 
-

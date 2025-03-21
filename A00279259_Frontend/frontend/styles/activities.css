@@ -125,14 +125,24 @@ body {
     padding: 20px;
 }
 
-/* Activity Card */
+.activity-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 15px;
+}
+
 .activity-card {
+	display: flex;
+    flex-direction: column;
     background: white;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 20px;
     text-align: left;
     max-width: 350px;
+    height: 100%;
 }
 
 .activity-card h3 {
@@ -208,10 +218,9 @@ body {
 }
 
 .activity-actions {
+    margin-top: auto; 
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin-top: 10px;
 }
 
 /* Modal Styling */
@@ -307,5 +316,9 @@ footer p {
     
     .navbar ul li {
         margin: 5px 0;
+    }
+    
+    .activity-card {
+        width: 100%; 
     }
 }

@@ -42,38 +42,37 @@ function fetchActivities(tripId) {
         headers: { "Accept": "application/xml" }
     })
     .then(response => response.text())
-    .then(parseXMLActivities)
+    .then(xmlText => {
+        // console.log("API Response: ", xmlText);
+        const activities = parseXMLActivities(xmlText);
+        displayActivities(activities);
+    })
     .catch(error => console.error("Error fetching activities:", error));
 }
 
 // Parse XML response for activities
 function parseXMLActivities(xmlText) {
     const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+    const xml = parser.parseFromString(xmlText, "application/xml");
 
-    const activitiesList = document.getElementById("activitiesList");
-    activitiesList.innerHTML = ""; 
-
-    const activityNodes = xmlDoc.getElementsByTagName("activity");
-
-    if (activityNodes.length === 0) {
-        activitiesList.innerHTML = "<p>No activities found for this trip.</p>";
-        return;
+    const activities = xml.getElementsByTagName("activity");
+    if (activities.length === 0) {
+        console.warn("No activities found in XML response.");
+        return [];
     }
 
-    const activities = [];
-    for (let activityNode of activityNodes) {
-        const activity = {
-            activityId: activityNode.getElementsByTagName("activityId")[0].textContent,
-            tripId: activityNode.getElementsByTagName("tripId")[0].textContent,
-            name: activityNode.getElementsByTagName("name")[0].textContent,
-            activityDate: activityNode.getElementsByTagName("activityDate")[0].textContent,
-            location: activityNode.getElementsByTagName("location")[0].textContent,
-            cost: activityNode.getElementsByTagName("cost")[0].textContent
-        };
-        activities.push(activity);
+    let activityList = [];
+    for (let activity of activities) {
+        const activityId = activity.querySelector("activityId")?.textContent || "TBC";
+        const tripId = activity.querySelector("tripId")?.textContent || "TBC";
+        const name = activity.querySelector("name")?.textContent || "TBC";
+        const activityDate = activity.querySelector("activityDate")?.textContent || "TBC";
+        const location = activity.querySelector("location")?.textContent || "TBC";
+        const cost = activity.querySelector("cost")?.textContent || "0.00";
+
+        activityList.push({ activityId, tripId, name, activityDate, location, cost });
     }
-    displayActivities(activities);
+    return activityList;
 }
 
 // Display activities

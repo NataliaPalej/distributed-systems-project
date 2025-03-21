@@ -124,12 +124,15 @@
 }
 
 .trip-card {
+	display: flex;
+    flex-direction: column;
     background: white;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     transition: 0.3s;
     max-width: 350px; 
+    height: 470px;
 }
 
 .trip-card:hover {
@@ -145,6 +148,10 @@
 .trip-card .trip-info {
     padding: 15px;
     text-align: left;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .trip-card .trip-info h3 {
@@ -228,10 +235,10 @@
 }
 
 .trip-actions {
+	margin-top: auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
 }
 
 /* Modal Styling */
