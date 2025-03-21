@@ -45,20 +45,17 @@ function fetchActivityDetails(activityId) {
         const xml = parser.parseFromString(xmlText, "application/xml");
 
         // Extract activity details
-        const activityId = xml.querySelector("activityId").textContent;
-        const tripId = xml.querySelector("tripId").textContent;
+        const activityId = xml.querySelector("activityId").textContent || "";;
+        const tripId = xml.querySelector("tripId")?.textContent || "";
         const activityName = xml.querySelector("name").textContent;
-        const activityDate = xml.querySelector("activityDate").textContent;
-        const location = xml.querySelector("location").textContent;
-        const cost = xml.querySelector("cost").textContent;
 
         // Populate form fields
         document.getElementById("activityId").value = activityId;
         document.getElementById("tripId").value = tripId;
         document.getElementById("name").value = activityName;
-        document.getElementById("activityDate").value = activityDate;
-        document.getElementById("location").value = location;
-        document.getElementById("cost").value = cost;
+        document.getElementById("activityDate").value = xml.querySelector("activityDate")?.textContent || "";
+        document.getElementById("location").value = xml.querySelector("location")?.textContent || "";
+        document.getElementById("cost").value = xml.querySelector("cost")?.textContent || "";
         
         return fetchDestination(tripId).then(tripDestination => {
             destination = tripDestination;
