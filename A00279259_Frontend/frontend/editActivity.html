@@ -45,6 +45,15 @@
 
             <label>Cost (€):</label>
             <input type="number" id="cost" step="0.01" required>
+            
+            <label>Activity Image:</label>
+			<input type="file" id="activityImage" accept="image/jpeg, image/png, image/jpg">
+			<p class="image-guideline">Image must be saved in <b><span id="imageFolderPath"></span></b> and named exactly as: <b><span id="imageFormat"></span></b></p>
+
+			<!-- Preview Uploaded Image -->
+			<div class="image-preview">
+			    <img id="previewImage" src="" alt="Activity Image Preview">
+			</div>
 
             <div class="button-group">
                 <button type="button" class="update-btn" onclick="updateActivity()">Update</button>

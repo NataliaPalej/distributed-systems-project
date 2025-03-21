@@ -45,6 +45,15 @@
 
             <label>Notes:</label>
             <textarea id="notes"></textarea>
+            
+            <label>Trip Image:</label>
+			<input type="file" id="tripImage" accept="image/jpeg, image/png, image/jpg">
+			<p class="image-guideline">Image must be named exactly as: <b><span id="imageFormat"></span></b></p>
+
+			<!-- Preview Uploaded Image -->
+			<div class="image-preview">
+			    <img id="previewImage" src="" alt="Trip Image Preview">
+			</div>
 
             <div class="button-group">
                 <button type="button" class="update-btn" onclick="updateTrip()">Update</button>

@@ -21,16 +21,43 @@ function fetchTripDetails(tripId) {
     .then(xmlText => {
         const parser = new DOMParser();
         const xml = parser.parseFromString(xmlText, "application/xml");
-		
-		document.getElementById("tripId").value = xml.querySelector("tripId").textContent;
-        document.getElementById("destination").value = xml.querySelector("destination").textContent;
+
+        const destination = xml.querySelector("destination").textContent;
+        document.getElementById("tripId").value = xml.querySelector("tripId").textContent;
+        document.getElementById("destination").value = destination;
         document.getElementById("startDate").value = xml.querySelector("startDate").textContent;
         document.getElementById("endDate").value = xml.querySelector("endDate").textContent;
         document.getElementById("budget").value = xml.querySelector("budget").textContent;
         document.getElementById("notes").value = xml.querySelector("notes").textContent;
+
+        // Generate expected img filename
+        const expectedImageName = cleanImageName(destination);
+        document.getElementById("imageFormat").textContent = `${expectedImageName}.jpg`;
+
+        // Set preview img if exists
+        document.getElementById("previewImage").src = `images/${expectedImageName}.jpg`;
+        document.getElementById("previewImage").onerror = function() {
+            this.src = 'images/default.jpg';
+        };
     })
     .catch(error => console.error("Error fetching trip details:", error));
 }
+
+document.getElementById("tripImage").addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById("previewImage").src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+function cleanImageName(destination) {
+    return destination.toLowerCase().replace(/,/g, '').replace(/\s+/g, '-'); 
+}
+
 
 // Update trip details via PUT request
 function updateTrip() {
