@@ -105,7 +105,7 @@ function displayTrips(trips) {
         editButton.addEventListener("click", (event) => {
 			// Prevents triggering the card click event
             event.stopPropagation(); 
-            window.location.href = `trip.html?tripId=${trip.tripId}`;
+            window.location.href = `editTrip.html?tripId=${trip.tripId}`;
         });
 
         // Add on click event to open activities.html with specific tripId
