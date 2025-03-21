@@ -55,8 +55,6 @@ public class TripResource {
 	        servletResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error inserting trip.");
 	        return;
 	    }
-		
-//		servletResponse.sendRedirect("../addTrip.html");
 	}
 	
 	@PUT

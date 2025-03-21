@@ -55,7 +55,7 @@ public enum TripDAOsql {
 	
 	private void insertInitialTrips() {
 		addTrip(new Trip("New York, USA", "14-01-2025", "20-01-2025", BigDecimal.valueOf(2500.00), "Exploring NYC, food tour and Times Square"));
-	    addTrip(new Trip("Chania, Crete, Greece", "18-09-20258", "28-09-2025", BigDecimal.valueOf(2000.00), "Chilling on the beach, visit Samaria Gorge."));
+	    addTrip(new Trip("Chania, Crete, Greece", "18-09-2025", "28-09-2025", BigDecimal.valueOf(2000.00), "Chilling on the beach, visit Samaria Gorge."));
 	    addTrip(new Trip("Santorini, Greece", "15-09-2025", "18-09-2025", BigDecimal.valueOf(1500.00), "Sunset views, volcano tour, and buggy adventure."));
 	    addTrip(new Trip("Bali, Indonesia", "06-06-2025", "17-06-2025", BigDecimal.valueOf(2700.00), "Temple visits, rice terraces, and scuba diving."));
 	    addTrip(new Trip("Krakow, Poland", "20-12-2025", "02-01-2026", BigDecimal.valueOf(1500.00), "Exploring old town, Auschwitz tour, and visit home."));
@@ -219,14 +219,19 @@ public enum TripDAOsql {
 	
 	// Delete trip
 	public Trip deleteTrip(int tripId) {
-		try (Statement stmt = connection.createStatement();
-				ResultSet rs = stmt.executeQuery("DELETE FROM trips WHERE tripId  =" + tripId)) {
-			rs.next();
-			tripId = rs.getInt("total");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		System.out.println("deleteTrip(" + tripId + ") :: deleted successfully.");
-		return tripsMap.remove(tripId);
-	}
+		try (Statement stmt = connection.createStatement()) {
+			int affectedRows = stmt.executeUpdate("DELETE FROM trips WHERE tripId = " + tripId);
+
+            if (affectedRows > 0) {
+            	System.out.println("deleteTrip(" + tripId + ") :: deleted successfully.");
+                return tripsMap.remove(tripId);
+            } else {
+            	System.out.println("deleteTrip(" + tripId + ") :: No trip found with that ID.");
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

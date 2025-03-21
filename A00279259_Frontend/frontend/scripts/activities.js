@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
     const tripId = getTripIdFromURL();
+    closeModal();
+    populateTripDropdown();
     if (tripId) {
-		fetchTripDetails(tripId);
-        fetchActivities(tripId);
+        fetchTripDetails(tripId);
     } else {
         console.error("No tripId found in URL");
     }
@@ -14,22 +15,65 @@ function getTripIdFromURL() {
     return urlParams.get("tripId");
 }
 
+let tripDestination = "";
+
 // Fetch destination name 
 function fetchTripDetails(tripId) {
-    fetch(`http://localhost:8080/A00279259_Backend/rest/trips/${tripId}`)
-        .then(response => response.json())
-        .then(trip => {
-            document.querySelector("h2").innerHTML = `Activities in <span class="destination-highlight">${trip.destination}</span>`;
+    fetch(`http://localhost:8080/A00279259_Backend/rest/trips/${tripId}`, {
+		// Request XML
+        headers: { "Accept": "application/xml" } 
+    })
+        .then(response => response.text())
+        .then(xmlText => {
+            const parser = new DOMParser();
+            const xml = parser.parseFromString(xmlText, "application/xml");
+            tripDestination = xml.querySelector("destination").textContent.trim();
+            
+            // Update header with destination name
+            document.querySelector("h2").innerHTML = `Activities in <span class="destination-highlight">${tripDestination}</span>`;
+        	fetchActivities(tripId);
         })
         .catch(error => console.error("Error fetching trip details:", error));
 }
 
 // Fetch activities for selected trip
 function fetchActivities(tripId) {
-    fetch(`http://localhost:8080/A00279259_Backend/rest/trips/${tripId}/activities`)
-        .then(response => response.json())
-        .then(data => displayActivities(data))
-        .catch(error => console.error("Error fetching activities:", error));
+    fetch(`http://localhost:8080/A00279259_Backend/rest/trips/${tripId}/activities`, {
+        headers: { "Accept": "application/xml" }
+    })
+    .then(response => response.text())
+    .then(parseXMLActivities)
+    .catch(error => console.error("Error fetching activities:", error));
+}
+
+// Parse XML response for activities
+function parseXMLActivities(xmlText) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+
+    const activitiesList = document.getElementById("activitiesList");
+    activitiesList.innerHTML = ""; 
+
+    const activityNodes = xmlDoc.getElementsByTagName("activity");
+
+    if (activityNodes.length === 0) {
+        activitiesList.innerHTML = "<p>No activities found for this trip.</p>";
+        return;
+    }
+
+    const activities = [];
+    for (let activityNode of activityNodes) {
+        const activity = {
+            activityId: activityNode.getElementsByTagName("activityId")[0].textContent,
+            tripId: activityNode.getElementsByTagName("tripId")[0].textContent,
+            name: activityNode.getElementsByTagName("name")[0].textContent,
+            activityDate: activityNode.getElementsByTagName("activityDate")[0].textContent,
+            location: activityNode.getElementsByTagName("location")[0].textContent,
+            cost: activityNode.getElementsByTagName("cost")[0].textContent
+        };
+        activities.push(activity);
+    }
+    displayActivities(activities);
 }
 
 // Display activities
@@ -48,13 +92,13 @@ function displayActivities(activities,) {
 
     activities.forEach(activity => {
 		// Get folder name based on location
-        const folderName = getFolderName(activity.location); 
-        // console.log("folderName: ", folderName);
+        const folderName = getFolderName(tripDestination); 
+        console.log("folderName: ", folderName);
         
         // Generate activity image name
         const activityImageName = getActivityImageName(activity.name); 
         // console.log("activityImageName: ", activityImageName);
-        
+    
         const activityCard = document.createElement("div");
         activityCard.classList.add("activity-card");
 
@@ -64,58 +108,121 @@ function displayActivities(activities,) {
                      alt="${activity.name}" 
                      onerror="this.onerror=null; this.src='images/default.jpg';">
             </div>
+            
             <div class="activity-info">
                 <h3>${activity.name}</h3>
                 <p><strong>Date:</strong> ${(activity.activityDate)}</p>
                 <p><strong>Location:</strong> ${activity.location}</p>
-                <p><strong>Cost:</strong> €${activity.cost ? activity.cost.toFixed(2) : "0.00"}</p>
-            </div>
+                <p><strong>Cost:</strong> \u20AC${parseFloat(activity.cost).toFixed(2)}</p>
+           </div>
         `;
+        
+        // Create delete button
+        const deleteButton = document.createElement("button");
+        deleteButton.classList.add("delete-btn");
+        deleteButton.innerHTML = "&times;";
+        deleteButton.addEventListener("click", (event) => {
+			// Prevent unexpected modal triggers
+            event.stopPropagation(); 
+            confirmDeleteActivity(activity.activityId, activity.name);
+        });
+
+        // Create delete container and attach delete btn
+        const deleteContainer = document.createElement("div");
+        deleteContainer.classList.add("delete-container");
+        deleteContainer.appendChild(deleteButton);
+
+        // Append delete btn inside activity img container
+        const imageContainer = activityCard.querySelector(".activity-image-container");
+        imageContainer.appendChild(deleteContainer);
 
         activitiesList.appendChild(activityCard);
     });
 }
 
 function getActivityImageName(activityName) {
-    return activityName
-        .split(" ") 
-        // Take the first two words
-        .slice(0, 2) 
-        // Join them with a hyphen
-        .join("-") 
-        .toLowerCase();
+    return activityName.split(" ").slice(0, 2).join("-").toLowerCase();
 }
 
-function cleanImageName(location) {
-    return location
-        .toLowerCase()
-        .replace(/,/g, '') 
-        .replace(/\s+/g, '-');
+// Get folder name for images 
+function getFolderName(destination) {
+    return destination.split(",")[0].toLowerCase().replace(/\s+/g, '-');
 }
 
-// Mapping for images folders 
-function getFolderName(location) {
-    const folderMap = {
-		"Bali, Indonesia": "bali",
-        "Ubud, Bali, Indonesia": "bali",
-        "Tabanan Regency, Bali, Indonesia" : "bali",
-        "Badung Regency, Bali, Indonesia" : "bali",
-        "Chania, Crete, Greece": "crete",
-        "Balos, Crete, Greece": "crete",
-        "Agia Roumeli, Crete, Greece": "crete",
-        "Krakow, Poland": "krakow",
-        "Oswiecim, Poland" : "krakow",
-        "Muszyna, Poland" : "krakow",
-        "Wieliczka, Poland" : "krakow",
-        "New York, USA": "new-york",
-        "Jersey City, USA": "new-york",
-        "Manhattan, New York, USA": "new-york",
-        "45 Rockefeller Plaza, New York, USA": "new-york",
-        "Santorini, Greece": "santorini",
-        "Oia, Santorini, Greece": "santorini",
-        "Akrotiri, Santorini, Greece": "santorini",
-        "Thera, Santorini, Greece": "santorini"
-    };
-    
-    return folderMap[location] || "default";
+// Delete function 
+let selectedActivityId = null;
+
+function confirmDeleteActivity(activityId, name) {
+    selectedActivityId = activityId;
+
+    // Update modal text
+    document.getElementById("modalText").innerHTML = `Are you sure you want to delete activity: 
+    <span id="modalActivityName">${name}</span>?<br><br>`;
+
+    // Show modal
+    document.getElementById("deleteModal").style.display = "flex";
+}
+
+function deleteActivity(activityId) {
+    fetch(`http://localhost:8080/A00279259_Backend/rest/activities/${activityId}`, {
+        method: "DELETE",
+    })
+    .then(response => {
+        if (response.ok) {
+			closeModal();
+            // alert("Activity deleted successfully!");
+            // Refresh Activities
+            fetchActivities(getTripIdFromURL());
+        } else {
+            alert("Error deleting activity.");
+        }
+    })
+    .catch(error => console.error("Error deleting activity:", error));
+}
+
+/* On click event for modal buttons */
+document.getElementById("confirmDeleteBtn").addEventListener("click", function() {
+    if (selectedActivityId) {
+        deleteActivity(selectedActivityId);
+    }
+});
+
+document.getElementById("cancelDeleteBtn").addEventListener("click", closeModal);
+
+function closeModal() {
+    document.getElementById("deleteModal").style.display = "none";
+}
+
+/* Nav Bar Dropdown */
+function populateTripDropdown() {
+    fetch("http://localhost:8080/A00279259_Backend/rest/trips", {
+        headers: { "Accept": "application/xml" }
+    })
+    .then(response => response.text())
+    .then(xmlString => {
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(xmlString, "application/xml");
+        const tripElements = xml.getElementsByTagName("trip");
+
+        const dropdown = document.getElementById("tripDropdown");
+
+        if (tripElements.length === 0) {
+            const noTrips = document.createElement("li");
+            noTrips.textContent = "No trips available";
+            dropdown.appendChild(noTrips);
+            return;
+        }
+
+        // Populate dropdown with trips
+        for (let trip of tripElements) {
+            let tripId = trip.getElementsByTagName("tripId")[0].textContent;
+            let destination = trip.getElementsByTagName("destination")[0].textContent;
+
+            const tripItem = document.createElement("a");
+            tripItem.href = `activities.html?tripId=${tripId}`;
+            tripItem.textContent = destination;
+            dropdown.appendChild(tripItem);
+        }
+    })
+    .catch(error => console.error("Error fetching trips for dropdown:", error));
 }

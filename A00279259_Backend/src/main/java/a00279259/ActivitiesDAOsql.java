@@ -51,27 +51,27 @@ public enum ActivitiesDAOsql {
     private void insertInitialActivities() {
     	// NYC Activities 
     			addActivity(new Activities(1, 1, "Visit Statue of Liberty and Ellis Island", "10-06-2025", "New York, USA", BigDecimal.valueOf(59.95)));
-    		    addActivity(new Activities(2, 1, "Visit Times Square", "11-06-2025", "New York, USA", BigDecimal.ZERO));
-    		    addActivity(new Activities(3, 1, "Visit Rockefeller Center", "06-12-2025", "New York, USA", BigDecimal.valueOf(25.00)));
+    		    addActivity(new Activities(2, 1, "Visit Times Square", "11-06-2025", "Manhattan, New York, USA", BigDecimal.ZERO));
+    		    addActivity(new Activities(3, 1, "Visit Rockefeller Center", "06-12-2025", "45 Rockefeller Plaza, New York, USA", BigDecimal.valueOf(25.00)));
 
     			// Crete Activities
-    		    addActivity(new Activities(4, 2, "Visit Samaria Gorge", "19-09-2025", "Chania, Crete, Greece", BigDecimal.valueOf(45.00)));
+    		    addActivity(new Activities(4, 2, "Visit Samaria Gorge", "19-09-2025", "Sfakia, Crete, Greece", BigDecimal.valueOf(45.00)));
     		    addActivity(new Activities(5, 2, "Visit Sainta Limania", "20-09-2025", "Chania, Crete, Greece", BigDecimal.valueOf(15.00)));
-    		    addActivity(new Activities(6, 2, "Visit Balos", "21-09-2025", "Chania, Crete, Greece", BigDecimal.valueOf(30.00)));
-    		    addActivity(new Activities(7, 2, "Visit Elafonisi", "22-09-2025", "Chania, Crete, Greece", BigDecimal.valueOf(40.00)));
-    		    addActivity(new Activities(8, 2, "Visit Fallasarna", "23-09-2025", "Chania, Crete, Greece", BigDecimal.valueOf(40.00)));
+    		    addActivity(new Activities(6, 2, "Visit Balos", "21-09-2025", "Balos, Crete, Greece", BigDecimal.valueOf(30.00)));
+    		    addActivity(new Activities(7, 2, "Visit Elafonisi", "22-09-2025", "Inachori, Crete, Greece", BigDecimal.valueOf(40.00)));
+    		    addActivity(new Activities(8, 2, "Visit Fallasarna", "23-09-2025", "Kissamos, Crete, Greece", BigDecimal.valueOf(40.00)));
     			
     		    // Santorini Activities 
-    		    addActivity(new Activities(9, 3, "Visit Oia", "15-09-2025", "Santorini, Greece", BigDecimal.ZERO));
-    		    addActivity(new Activities(10, 3, "Visit Thera", "16-09-2025", "Santorini, Greece", BigDecimal.ZERO));
-    		    addActivity(new Activities(11, 3, "Visit Red Beach", "17-09-2025", "Santorini, Greece", BigDecimal.ZERO));
-    		    addActivity(new Activities(12, 3, "Visit White Beach", "17-09-2025", "Santorini, Greece", BigDecimal.ZERO));
+    		    addActivity(new Activities(9, 3, "Visit Oia", "15-09-2025", "Oia, Santorini, Greece", BigDecimal.ZERO));
+    		    addActivity(new Activities(10, 3, "Visit Thera", "16-09-2025", "Thera, Santorini, Greece", BigDecimal.ZERO));
+    		    addActivity(new Activities(11, 3, "Visit Red Beach", "17-09-2025", "Red Beach, Santorini, Greece", BigDecimal.ZERO));
+    		    addActivity(new Activities(12, 3, "Visit White Beach", "17-09-2025", "Aspri, Santorini, Greece", BigDecimal.ZERO));
     		    addActivity(new Activities(13, 3, "Do Buggie Adventure", "16-09-2025", "Santorini, Greece", BigDecimal.valueOf(160.00)));
     		    
     			// Bali Activities 
     		    addActivity(new Activities(14, 4, "Explore Ubud Monkey Forest", "10-06-2025", "Ubud, Bali, Indonesia", BigDecimal.valueOf(10.00)));
-    		    addActivity(new Activities(15, 4, "Visit Tanah Lot Temple", "11-06-2025", "Bali, Indonesia", BigDecimal.valueOf(6.00)));
-    		    addActivity(new Activities(16, 4, "Experience Bali Swing", "12-06-2025", "Bali, Indonesia", BigDecimal.valueOf(60.00)));
+    		    addActivity(new Activities(15, 4, "Visit Tanah Lot Temple", "11-06-2025", "Berban, Kediri, Bali, Indonesia", BigDecimal.valueOf(6.00)));
+    		    addActivity(new Activities(16, 4, "Experience Bali Swing", "12-06-2025", "Bongkasa Pertiwi, Kabupaten Badung, Bali, Indonesia", BigDecimal.valueOf(60.00)));
     		    
     			// Krakow Activities 
     		    addActivity(new Activities(17, 5, "Visit Main Square", "21-12-2025", "Krakow, Poland", BigDecimal.ZERO));
