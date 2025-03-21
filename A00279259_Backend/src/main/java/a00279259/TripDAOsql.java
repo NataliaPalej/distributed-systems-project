@@ -71,12 +71,12 @@ public enum TripDAOsql {
 			while (rs.next()) {
 				Trip t = new Trip();
 				t.setTripId(rs.getInt("tripId"));
-				t.setDestination(rs.getString("destination"));
-				t.setStartDate(rs.getString("startDate"));
-				t.setEndDate(rs.getString("endDate"));
-				t.setBudget(rs.getBigDecimal("budget"));
-				t.setNotes(rs.getString("notes"));
-				trips.add(t);
+	            t.setDestination(rs.getString("destination") != null ? rs.getString("destination") : "TBC");
+	            t.setStartDate(rs.getString("startDate") != null ? rs.getString("startDate") : "TBC");
+	            t.setEndDate(rs.getString("endDate") != null ? rs.getString("endDate") : "TBC");
+	            t.setBudget(rs.getBigDecimal("budget") != null ? rs.getBigDecimal("budget") : BigDecimal.ZERO);
+	            t.setNotes(rs.getString("notes") != null ? rs.getString("notes") : "TBC");
+	            trips.add(t);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -94,11 +94,11 @@ public enum TripDAOsql {
 			if (rs.next()) {
 				Trip t = new Trip();
 				t.setTripId(rs.getInt("tripId"));
-				t.setDestination(rs.getString("destination"));
-				t.setStartDate(rs.getString("startDate"));
-				t.setEndDate(rs.getString("endDate"));
-				t.setBudget(rs.getBigDecimal("budget"));
-				t.setNotes(rs.getString("notes"));
+				t.setDestination(rs.getString("destination") != null ? rs.getString("destination") : "TBC");
+	            t.setStartDate(rs.getString("startDate") != null ? rs.getString("startDate") : "TBC");
+	            t.setEndDate(rs.getString("endDate") != null ? rs.getString("endDate") : "TBC");
+	            t.setBudget(rs.getBigDecimal("budget") != null ? rs.getBigDecimal("budget") : BigDecimal.ZERO);
+	            t.setNotes(rs.getString("notes") != null ? rs.getString("notes") : "TBC");
 				
 				// Fetch activities for the trip id
 				List<Activities> activities = getActivitiesByTrip(tripId);
@@ -123,12 +123,12 @@ public enum TripDAOsql {
 
             while (rs.next()) {
                 Activities a = new Activities(
-                        rs.getInt("activityId"),
-                        rs.getInt("tripId"),
-                        rs.getString("name"),
-                        rs.getString("activityDate"),
-                        rs.getString("location"),
-                        rs.getBigDecimal("cost")
+                    rs.getInt("activityId"),
+                    rs.getInt("tripId"),
+                    rs.getString("name") != null ? rs.getString("name") : "TBC",
+                    rs.getString("activityDate") != null ? rs.getString("activityDate") : "TBC",
+                    rs.getString("location") != null ? rs.getString("location") : "TBC",
+                    rs.getBigDecimal("cost") != null ? rs.getBigDecimal("cost") : BigDecimal.ZERO
                 );
                 activities.add(a);
             }

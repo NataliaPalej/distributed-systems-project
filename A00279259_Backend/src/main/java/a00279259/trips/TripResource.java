@@ -1,10 +1,8 @@
 package a00279259.trips;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -13,8 +11,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import a00279259.TripDAOsql;
 import a00279259.activities.Activities;
@@ -43,20 +42,35 @@ public class TripResource {
 		return TripDAOsql.instance.getActivitiesByTrip(Integer.parseInt(tripId));
     }
 	
-	@POST
-	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_HTML})
-	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public void addTrip(Trip trip, @Context HttpServletResponse servletResponse) throws IOException {
-		
-		Trip newTrip = TripDAOsql.instance.addTrip(trip);
-		
-		if (newTrip == null) {
-	        System.out.println("Error inserting trip.");
-	        servletResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error inserting trip.");
-	        return;
-	    }
-	}
+//	@POST
+//	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_HTML})
+//	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+//	public void addTrip(Trip trip, @Context HttpServletResponse servletResponse) throws IOException {
+//		
+//		Trip newTrip = TripDAOsql.instance.addTrip(trip);
+//		
+//		if (newTrip == null) {
+//	        System.out.println("Error inserting trip.");
+//	        servletResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error inserting trip.");
+//	        return;
+//	    }
+//	}
 	
+	@POST
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	public Trip addTrip(Trip trip) {
+	    Trip newTrip = TripDAOsql.instance.addTrip(trip);
+
+	    if (newTrip == null) {
+	        System.out.println("Error inserting trip.");
+	        throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+	    }
+
+	    System.out.println("New trip added with ID: " + newTrip.getTripId());
+	    return newTrip;
+	}
+
 	@PUT
 	@Path("{tripId}")
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
