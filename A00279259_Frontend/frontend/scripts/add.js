@@ -42,7 +42,7 @@ function setupActivityImageNaming() {
 
     function updateActivityImageFormat() {
         const activityImageName = getActivityImageName(activityNameInput.value);
-        imageFormatText.textContent = activityImageName ? `${activityImageName}.jpg` : "Enter activity name...";
+        imageFormatText.textContent = activityImageName ? `${activityImageName}.jpg` : "activity name";
     }
 }
 

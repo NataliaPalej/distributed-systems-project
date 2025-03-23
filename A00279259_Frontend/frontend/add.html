@@ -65,8 +65,8 @@
             <label>Activity Name:</label>
             <input type="text" id="activityName">
 
-            <label>Activity Date (DD/MM/YYYY):</label>
-            <input type="text" id="activityDate" placeholder="dd/mm/yyyy">
+            <label>Activity Date (DD-MM-YYYY):</label>
+            <input type="text" id="activityDate" placeholder="DD-MM-YYYY">
 
             <label>Location:</label>
             <input type="text" id="activityLocation">
@@ -76,7 +76,7 @@
             
             <label>Activity Image:</label>
 			<input type="file" id="activityImage" accept="image/jpeg, image/png, image/jpg">
-			<p class="image-guideline">Image must be saved in folder <b><span id="imageFolderPath"></span></b> and named as: <b><span id="imageFormatText"></span></b></p>
+			<p class="image-guideline">Image must be saved in folder <b><span id="imageFolderPath">images/</span></b> and named as: <b><span id="imageFormatText">acitvity name</span></b></p>
 
 			<div class="button-group">
 	            <button type="button" class="add-btn" onclick="addActivity()">Add Activity</button>
