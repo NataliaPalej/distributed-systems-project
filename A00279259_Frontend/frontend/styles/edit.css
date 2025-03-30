@@ -1,0 +1,64 @@
+/* Global */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Header with Background Image */
+.background {
+    background: url('../images/background6.jpg') no-repeat center center/cover;
+    min-height: 250px;
+    height: 25vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.background h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5em;
+    font-weight: bold;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); 
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:focus {
+    color: #FFD700; 
+}
+
+/* Footer */
+footer {
+    background: #333; 
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
+    width: 100%;
+}
+
+footer p {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.footer-highlight {
+    font-weight: bold;
+    color: #FFD700; 
+}
