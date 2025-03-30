@@ -15,7 +15,8 @@ body {
 /* Header */
 .background {
     background: url('../images/background7.jpg') no-repeat center center/cover;
-    height: 300px;
+    min-height: 250px;
+    height: 25vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -32,65 +33,9 @@ body {
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); 
 }
 
-/* Nav bar */
-.navbar {
-    background-color: #333;
-    padding: 10px 0;
-    text-align: center;
-    overflow: hidden;
-}
-
-.navbar a {
-  float: left;
-  font-size: 16px;
-  background-color: #333;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-.navbar a:hover, .dropdown:hover .dropbtn {
-  color: #FFD700;
-}
-
-/* Dropdown */
-.dropdown {
-  float: left;
-  overflow: hidden;
-}
-
-.dropdown .dropbtn {
-  font-size: 16px;  
-  border: none;
-  outline: none;
-  color: white;
-  padding: 14px 16px;
-  background-color: #333;
-  margin: 0;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #333;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  float: none;
-  background-color: #333;
-  color: white;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  text-align: left;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:focus {
+    color: #FFD700; 
 }
 
 .hidden {
@@ -108,30 +53,9 @@ body {
     text-align: center;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-label {
-    font-size: 16px;
-    font-weight: 500;
+form label {
     text-align: left;
-}
-
-input, textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
-}
-
-input:focus, textarea:focus {
-    border-color: #FFD700;
-    outline: none;
+    display: block;
 }
 
 .image-guideline {
@@ -185,7 +109,7 @@ footer {
     color: white;
     text-align: center;
     padding: 20px;
-    margin-top: 30px;
+    margin-top: auto;
     width: 100%;
 }
 

@@ -4,11 +4,27 @@ document.addEventListener("DOMContentLoaded", function () {
     const type = urlParams.get("type");
 
     if (type === "trip") {
-        document.getElementById("tripForm").classList.remove("hidden");
-        setupTripImageNaming();
-    } else if (type === "activity") {
-        document.getElementById("activityForm").classList.remove("hidden");
-        setupActivityImageNaming();
+    document.getElementById("tripForm").classList.remove("d-none");
+    setupTripImageNaming();
+	} else if (type === "activity") {
+	    document.getElementById("activityForm").classList.remove("d-none");
+	    setupActivityImageNaming();
+	}
+    
+    // Format date input
+    const startDateInput = document.getElementById("tripStartDate");
+    const endDateInput = document.getElementById("tripEndDate");
+
+    if (startDateInput) {
+        startDateInput.addEventListener("blur", (e) => {
+            e.target.value = normalizeDate(e.target.value);
+        });
+    }
+
+    if (endDateInput) {
+        endDateInput.addEventListener("blur", (e) => {
+            e.target.value = normalizeDate(e.target.value);
+        });
     }
 });
 
@@ -28,8 +44,20 @@ function setupActivityImageNaming() {
     const tripIdInput = document.getElementById("tripId");
     const activityNameInput = document.getElementById("activityName");
     const imageFolderPath = document.getElementById("imageFolderPath");
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const prefillTripId = urlParams.get("tripId");
+    
+    // Pre-fill tripId if in URL
+    if (prefillTripId) {
+        tripIdInput.value = prefillTripId;
+        tripIdInput.setAttribute("disabled", true);
+        fetchTripDetails(prefillTripId, function (folderName) {
+            imageFolderPath.textContent = `images/${folderName}/`;
+        });
+    }
 
-    // Fetch folder path when tripID is entered
+    // Update folder name dynamically
     tripIdInput.addEventListener("input", function () {
         fetchTripDetails(tripIdInput.value, function (folderName) {
             imageFolderPath.textContent = `images/${folderName}/`;
@@ -66,11 +94,14 @@ function fetchTripDetails(tripId) {
 
 // Add a Trip
 function addTrip() {
+	const startDate = normalizeDate(document.getElementById("tripStartDate").value);
+	const endDate = normalizeDate(document.getElementById("tripEndDate").value);
+	
     const tripData = `
         <trip>
             <destination>${document.getElementById("tripDestination").value}</destination>
-            <startDate>${document.getElementById("tripStartDate").value}</startDate>
-            <endDate>${document.getElementById("tripEndDate").value}</endDate>
+            <startDate>${startDate}</startDate>
+            <endDate>${endDate}</endDate>
             <budget>${document.getElementById("tripBudget").value}</budget>
             <notes>${document.getElementById("tripNotes").value}</notes>
         </trip>`;
@@ -94,7 +125,7 @@ function addTrip() {
         
         if (tripId) {
             alert(`Trip added successfully!\nNew Trip ID: ${tripId}`);
-            window.location.href = `index.html?tripId=${tripId}`;
+            window.location.href = `activities.html?tripId=${tripId}`;
         } else {
             alert("Trip added, but Trip ID could not be retrieved.");
         }
@@ -107,9 +138,11 @@ function addTrip() {
 
 // Add an Activity
 function addActivity() {
+	const tripId = document.getElementById("tripId").value;
+	
     const activityData = `
         <activity>
-            <tripId>${document.getElementById("tripId").value}</tripId>
+            <tripId>${tripId}</tripId>
             <name>${document.getElementById("activityName").value}</name>
             <activityDate>${document.getElementById("activityDate").value}</activityDate>
             <location>${document.getElementById("activityLocation").value}</location>
@@ -124,7 +157,7 @@ function addActivity() {
     .then(response => {
         if (response.ok) {
             alert("Activity added successfully!");
-            window.location.href = `index.html`;
+            window.location.href = `activities.html?tripId=${tripId}`;
         } else {
             alert("Error adding activity.");
         }
@@ -147,40 +180,31 @@ function getFolderName(destination) {
     return destination.split(",")[0].toLowerCase().replace(/\s+/g, '-');
 }
 
-// Populate dropdown for trips
-function populateTripDropdown() {
-    fetch("http://localhost:8080/A00279259_Backend/rest/trips", {
-        headers: { "Accept": "application/xml" }
-    })
-    .then(response => response.text())
-    .then(xmlString => {
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(xmlString, "application/xml");
-        const tripElements = xml.getElementsByTagName("trip");
-
-        const dropdown = document.getElementById("tripDropdown");
-
-        if (tripElements.length === 0) {
-            const noTrips = document.createElement("li");
-            noTrips.textContent = "No trips available";
-            dropdown.appendChild(noTrips);
-            return;
-        }
-
-        for (let trip of tripElements) {
-            let tripId = trip.getElementsByTagName("tripId")[0].textContent;
-            let destination = trip.getElementsByTagName("destination")[0].textContent;
-
-            const tripItem = document.createElement("a");
-            tripItem.href = `activities.html?tripId=${tripId}`;
-            tripItem.textContent = destination;
-            dropdown.appendChild(tripItem);
-        }
-    })
-    .catch(error => console.error("Error fetching trips for dropdown:", error));
-}
-
 // Cancel and go back to index.html
 function cancelAdd() {
     window.location.href = "index.html";
 }
+
+// Dynamically format date input
+function setupDateFormatting(id) {
+    const input = document.getElementById(id);
+    if (!input) return;
+
+    input.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, "");
+        if (value.length > 8) value = value.slice(0, 8);
+
+        let formatted = value;
+        if (value.length >= 5) {
+            formatted = `${value.slice(0, 2)}/${value.slice(2, 4)}/${value.slice(4)}`;
+        } else if (value.length >= 3) {
+            formatted = `${value.slice(0, 2)}/${value.slice(2)}`;
+        }
+
+        e.target.value = formatted;
+    });
+}
+
+setupDateFormatting("activityDate");
+setupDateFormatting("tripStartDate");
+setupDateFormatting("tripEndDate");
