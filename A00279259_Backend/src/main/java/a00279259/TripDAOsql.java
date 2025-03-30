@@ -28,8 +28,6 @@ public enum TripDAOsql {
 			Class.forName("org.hsqldb.jdbcDriver");
 			connection = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/oneDB", "SA", "Passw0rd");
 			initializeTrips();
-			// Initialize Activities after Trips
-			ActivitiesDAOsql.instance.initializeActivities();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -53,14 +51,16 @@ public enum TripDAOsql {
 		}
 	}
 	
-	private void insertInitialTrips() {
-		addTrip(new Trip("New York, USA", "14-01-2025", "20-01-2025", BigDecimal.valueOf(2500.00), "Exploring NYC, food tour and Times Square"));
-	    addTrip(new Trip("Chania, Crete, Greece", "18-09-2025", "28-09-2025", BigDecimal.valueOf(2000.00), "Chilling on the beach, visit Samaria Gorge."));
-	    addTrip(new Trip("Santorini, Greece", "15-09-2025", "18-09-2025", BigDecimal.valueOf(1500.00), "Sunset views, volcano tour, and buggy adventure."));
-	    addTrip(new Trip("Bali, Indonesia", "06-06-2025", "17-06-2025", BigDecimal.valueOf(2700.00), "Temple visits, rice terraces, and scuba diving."));
-	    addTrip(new Trip("Krakow, Poland", "20-12-2025", "02-01-2026", BigDecimal.valueOf(1500.00), "Exploring old town, Auschwitz tour, and visit home."));
+	public void insertInitialTrips() {
+		addTrip(new Trip("New York, USA", "14/01/2025", "20/01/2025", BigDecimal.valueOf(2500.00), "Exploring NYC, food tour and Times Square"));
+	    addTrip(new Trip("Chania, Crete, Greece", "18/09/2025", "28/09/2025", BigDecimal.valueOf(2000.00), "Chilling on the beach, visit Samaria Gorge."));
+	    addTrip(new Trip("Santorini, Greece", "15/09/2025", "18/09/2025", BigDecimal.valueOf(1500.00), "Sunset views, volcano tour, and buggy adventure."));
+	    addTrip(new Trip("Bali, Indonesia", "06/06/2025", "17/06/2025", BigDecimal.valueOf(2700.00), "Temple visits, rice terraces, and scuba diving."));
+	    addTrip(new Trip("Krakow, Poland", "20/12/2025", "02/01/2026", BigDecimal.valueOf(1500.00), "Exploring old town, Auschwitz tour, and visit home."));
 	    
 	    System.out.println("Initial trips inserted successfully.");
+	    
+	    ActivitiesDAOsql.instance.insertInitialActivities();
 	}
 	
 	// Get all trips
@@ -234,4 +234,38 @@ public enum TripDAOsql {
             return null;
         }
     }
+	
+	// Delete trips
+	public void clearAllTrips() {
+	    try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM trips")) {
+	        stmt.executeUpdate();
+	        System.out.println("All trips deleted.");
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	// Get trip stats
+	public List<Map<String, Object>> getActivityStatsPerTrip() {
+		List<Map<String, Object>> tripStatsList = new ArrayList<>();
+	    String sql = "SELECT tripId, COUNT(*) AS totalActivities, SUM(cost) AS totalCost FROM activities GROUP BY tripId";
+
+	    try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+	        while (rs.next()) {
+	            int tripId = rs.getInt("tripId");
+	            Trip trip = getTrip(tripId);  // You already have this method
+	            if (trip != null) {
+	                Map<String, Object> tripStats = new HashMap<>();
+	                tripStats.put("tripId", tripId);
+	                tripStats.put("destination", trip.getDestination());
+	                tripStats.put("totalActivities", rs.getInt("totalActivities"));
+	                tripStats.put("totalCost", rs.getBigDecimal("totalCost"));
+	                tripStatsList.add(tripStats);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return tripStatsList;
+	}
 }

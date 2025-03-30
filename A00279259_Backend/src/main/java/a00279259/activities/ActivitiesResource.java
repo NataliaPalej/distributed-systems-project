@@ -1,6 +1,7 @@
 package a00279259.activities;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +13,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -34,6 +36,16 @@ public class ActivitiesResource {
     public Activities getActivity(@PathParam("activityId") String activityId) {
 		return ActivitiesDAOsql.instance.getActivity(Integer.parseInt(activityId));
     }
+	
+	// Filter by cost
+	@GET
+	@Path("/search")
+	@Produces("application/xml")
+	public List<Activities> searchActivities(@QueryParam("minCost") BigDecimal min, @QueryParam("maxCost") BigDecimal max) {
+		if (min == null) min = BigDecimal.ZERO;
+	    if (max == null) max = BigDecimal.valueOf(999999);
+	    return ActivitiesDAOsql.instance.findByCost(min, max);
+	}
 	
 	@POST
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_HTML})

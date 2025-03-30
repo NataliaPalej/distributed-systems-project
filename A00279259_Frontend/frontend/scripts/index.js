@@ -1,8 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
 	console.log("DOMContentLoaded index.js")
 	closeModal();
-    fetchTrips();
-    populateTripDropdown();
+	
+    fetchActivityStats().then(() => {
+        fetchTrips();
+        populateTripDropdown();
+    });
 });
 
 function fetchTrips() {
@@ -27,21 +30,16 @@ function parseTripsXML(xmlString) {
         let tripId = trip.getElementsByTagName("tripId")[0]?.textContent;
         let destination = trip.getElementsByTagName("destination")[0]?.textContent || "TBC";
         let startDate = trip.getElementsByTagName("startDate")[0]?.textContent?.trim() !== "" 
-            ? trip.getElementsByTagName("startDate")[0].textContent 
-            : "TBC";
+            ? trip.getElementsByTagName("startDate")[0].textContent : "TBC";
         let endDate = trip.getElementsByTagName("endDate")[0]?.textContent?.trim() !== "" 
-            ? trip.getElementsByTagName("endDate")[0].textContent 
-            : "TBC";
+            ? trip.getElementsByTagName("endDate")[0].textContent : "TBC";
         let budget = trip.getElementsByTagName("budget")[0]?.textContent?.trim() !== "" 
-            ? trip.getElementsByTagName("budget")[0].textContent 
-            : "TBC";
+            ? trip.getElementsByTagName("budget")[0].textContent : "TBC";
         let notes = trip.getElementsByTagName("notes")[0]?.textContent?.trim() !== "" 
-            ? trip.getElementsByTagName("notes")[0].textContent 
-            : "TBC";
+            ? trip.getElementsByTagName("notes")[0].textContent : "TBC";
 
         trips.push({ tripId, destination, startDate, endDate, budget, notes });
     }
-
     return trips;
 }
 
@@ -57,40 +55,48 @@ function displayTrips(trips) {
     const today = new Date();
     
     // Sort trips by startDate asc
-    trips.sort((a, b) => new Date(a.startDate.split("-").reverse().join("-")) - new Date(b.startDate.split("-").reverse().join("-")));
-    
+    trips.sort((a, b) => {
+        const aDate = toDate(a.startDate);
+        const bDate = toDate(b.startDate);
+        return aDate - bDate;
+    });
+	
     trips.forEach(trip => {
+		const start = trip.startDate;
+        const end = trip.endDate;
+        
+        const startDate = toDate(start);
+        const endDate = toDate(end);
+
+        const isOngoing = startDate <= today && endDate >= today;
+        const isPast = endDate < today;
+		
+        const imageName = cleanImageName(trip.destination);
+        
         const tripCard = document.createElement("div");
         tripCard.classList.add("trip-card");
 
-        // Extract day, month, and year from trip.startDate
-        const [tripDay, tripMonth, tripYear] = trip.startDate.split("-").map(Number);
-        const tripDate = new Date(tripYear, tripMonth - 1, tripDay);
-
-        // Check if the trip is in the past
-        const isPast = tripDate < today;
-
-        const imageName = cleanImageName(trip.destination);
-
         tripCard.innerHTML = `
-            <div class="trip-image-container ${isPast ? 'past-trip' : ''}">
-                <img src="images/${imageName}.jpg" alt="${trip.destination}" onerror="this.onerror=null; this.src='images/default.jpg';">
-                ${isPast ? '<div class="trip-overlay">COMPLETED</div>' : ''}
-                <div class="delete-container"></div>
-            </div>
-            <div class="trip-info">
-                <h3>${trip.destination}</h3>
-                <p><strong>Start Date:</strong> ${trip.startDate}</p>
-                <p><strong>End Date:</strong> ${trip.endDate}</p>
-                <p><strong>Budget:</strong> \u20AC${trip.budget}</p>
-                <br>
-                <p><strong>Notes:</strong> ${trip.notes}</p>
-                <br>
-                <div class="trip-actions">
-                	<button class="edit-btn">Edit</button>
-            	</div>
-            </div>
-        `;
+		    <div class="trip-image-container ${isPast ? 'past-trip' : ''}">
+		        <img src="images/${imageName}.jpg" alt="${trip.destination}" onerror="this.onerror=null; this.src='images/default.jpg';">
+		        ${isPast ? '<div class="trip-overlay">COMPLETED</div>' : isOngoing
+		        ? '<div class="trip-overlay">ONGOING</div>' : ''}
+		        <div class="delete-container"></div>
+		    </div>
+		    <div class="trip-info">
+		        <div class="trip-details">
+		            <h3>${trip.destination}</h3>
+		            <p><strong>Start Date:</strong> ${start}</p>
+		            <p><strong>End Date:</strong> ${end}</p>
+		            <p><strong>Budget:</strong> \u20AC${trip.budget}</p>
+		            <p class="notes-section"><strong>Notes:</strong> ${trip.notes}</p>  
+		        </div><br/>
+		        <p><strong>Total Activities:</strong> ${tripStatsMap[trip.tripId]?.totalActivities || 0}</p>
+		        <div class="trip-actions">
+		            <button class="edit-btn">Edit</button>
+		        </div>
+		    </div>
+		`;
         
         // Create delete button
         const deleteButton = document.createElement("button");
@@ -113,7 +119,7 @@ function displayTrips(trips) {
         editButton.addEventListener("click", (event) => {
 			// Prevents triggering the card click event
             event.stopPropagation(); 
-            window.location.href = `editTrip.html?tripId=${trip.tripId}`;
+            window.location.href = `edit.html?type=trip&tripId=${trip.tripId}`;
         });
 
         // Add on click event to open activities.html with specific tripId
@@ -129,7 +135,6 @@ function displayTrips(trips) {
         }
     });
 }
-
 
 // Fix generated destination image name 
 function cleanImageName(destination) {
@@ -176,42 +181,18 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", function()
     }
 });
 
-document.getElementById("cancelDeleteBtn").addEventListener("click", closeModal);
+let tripStatsMap = {}
 
-function closeModal() {
-    document.getElementById("deleteModal").style.display = "none";
-}
-
-/* Nav Bar Dropdown */
-function populateTripDropdown() {
-    fetch("http://localhost:8080/A00279259_Backend/rest/trips", {
-        headers: { "Accept": "application/xml" }
+function fetchActivityStats(){
+	return fetch("http://localhost:8080/A00279259_Backend/rest/trips/activity-stats", {
+        headers: { "Accept": "application/json" }
     })
-    .then(response => response.text())
-    .then(xmlString => {
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(xmlString, "application/xml");
-        const tripElements = xml.getElementsByTagName("trip");
-
-        const dropdown = document.getElementById("tripDropdown");
-
-        if (tripElements.length === 0) {
-            const noTrips = document.createElement("li");
-            noTrips.textContent = "No trips available";
-            dropdown.appendChild(noTrips);
-            return;
-        }
-
-        // Populate dropdown with trips
-        for (let trip of tripElements) {
-            let tripId = trip.getElementsByTagName("tripId")[0].textContent;
-            let destination = trip.getElementsByTagName("destination")[0].textContent;
-
-            const tripItem = document.createElement("a");
-            tripItem.href = `activities.html?tripId=${tripId}`;
-            tripItem.textContent = destination;
-            dropdown.appendChild(tripItem);
-        }
+    .then(response => response.json())
+    .then(data => {
+		// Convert list to map
+        data.forEach(stat => {
+            tripStatsMap[stat.tripId] = stat;
+        });
     })
-    .catch(error => console.error("Error fetching trips for dropdown:", error));
+    .catch(error => console.error("Error fetching activity stats:", error));
 }

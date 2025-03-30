@@ -32,65 +32,13 @@ body {
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); 
 }
 
-/* Nav bar */
-.navbar {
-    background-color: #333;
-    padding: 10px 0;
-    text-align: center;
-    overflow: hidden;
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:focus {
+    color: #FFD700; 
 }
 
-.navbar a {
-  float: left;
-  font-size: 16px;
-  background-color: #333;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-.navbar a:hover, .dropdown:hover .dropbtn {
-  color: #FFD700;
-}
-
-/* Dropdown */
-.dropdown {
-  float: left;
-  overflow: hidden;
-}
-
-.dropdown .dropbtn {
-  font-size: 16px;  
-  border: none;
-  outline: none;
-  color: white;
-  padding: 14px 16px;
-  background-color: #333;
-  margin: 0;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #333;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  float: none;
-  background-color: #333;
-  color: white;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  text-align: left;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
+#costFilter {
+    min-width: 180px;
 }
 
 /* Activities Section */
@@ -113,54 +61,42 @@ body {
     font-size: 26px;
     font-weight: bold;
     background: #f8f8f8;
-    padding: 15px;
-    width: 100%;
+}
+
+.activities-header {
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#addActivityBtn {
+    white-space: nowrap;
 }
 
 .activities-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     justify-content: center;
     padding: 20px;
 }
 
-.activity-info {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding: 15px;
-}
-
-.activity-card {
-	display: flex;
-    flex-direction: column;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    text-align: left;
-    max-width: 350px;
-    height: 100%;
-}
-
-.activity-card h3 {
-    font-size: 22px;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.activity-card p {
-    font-size: 16px;
+.card-text {
     color: #666;
+    margin: 2px 0;
+    line-height: 1.4;
+    text-align: left;
 }
 
 .activity-image-container {
+    position: relative;
     width: 100%;
     height: 200px;
     overflow: hidden;
-    position: relative;
 }
 
 .activity-image-container img {
@@ -169,29 +105,40 @@ body {
     object-fit: cover;
 }
 
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
 /* Delete button */
 .delete-btn {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: red;
+    background-color: rgba(255, 0, 0, 0.9); /* subtle red */
     color: white;
     border: none;
-    width: 25px;
-    height: 25px;
-    font-size: 16px;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    line-height: 1;
     font-weight: bold;
     cursor: pointer;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.8;
-    transition: 0.3s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    z-index: 10;
 }
 
 .delete-btn:hover {
     opacity: 1;
+    background-color: #c9302c;
+    transform: scale(1.1);
 }
 
 /* Edit Button */
@@ -217,37 +164,39 @@ body {
     transform: scale(1.05);
 }
 
-.activity-actions {
-    margin-top: auto; 
-    display: flex;
-    justify-content: center;
-}
-
 /* Modal Styling */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    align-items: center;
-    justify-content: center;
+	display: none;
+	position: fixed;
+	z-index: 1050;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	justify-content: center;
+	align-items: center;
 }
 
 .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    width: 300px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	background: white;
+	padding: 25px 30px;
+	border-radius: 10px;
+	width: 100%;
+	max-width: 500px;
+	text-align: center;
+	box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+#modalText {
+	font-size: 1.1rem;
+	margin-bottom: 20px;
+	color: #333;
 }
 
 .modal p #modalActivityName {
     font-size: 1rem;
+    margin-bottom: 15px;
     font-weight: bold;
     color: #ff5733; 
     text-transform: uppercase;
@@ -261,12 +210,18 @@ body {
 }
 
 .confirm-btn {
-    background: red;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 5px;
-    cursor: pointer;
+	background-color: #dc3545;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	font-weight: bold;
+	transition: background-color 0.3s;
+}
+
+.confirm-btn:hover {
+	background-color: #c82333;
 }
 
 .cancel-btn {
@@ -278,13 +233,17 @@ body {
     cursor: pointer;
 }
 
+.cancel-btn:hover {
+	background-color: #5a6268;
+}
+
 /* Footer */
 footer {
     background: #333; 
     color: white;
     text-align: center;
     padding: 20px;
-    margin-top: 30px;
+    margin-top: auto;
     width: 100%;
 }
 
@@ -297,28 +256,4 @@ footer p {
 .footer-highlight {
     font-weight: bold;
     color: #FFD700; 
-}
-
-/* RESPONSIVE STYLING */
-@media (max-width: 768px) { 
-	.background {
-        height: 250px;
-    }
-
-    .background h1 {
-        font-size: 1.8em; 
-    }
-    
-    .navbar ul {
-        flex-direction: column;
-        padding: 10px 0;
-    }
-    
-    .navbar ul li {
-        margin: 5px 0;
-    }
-    
-    .activity-card {
-        width: 100%; 
-    }
 }

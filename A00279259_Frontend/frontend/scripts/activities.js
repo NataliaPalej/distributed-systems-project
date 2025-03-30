@@ -16,6 +16,7 @@ function getTripIdFromURL() {
 }
 
 let tripDestination = "";
+let allActivities = [];
 
 // Fetch destination name 
 function fetchTripDetails(tripId) {
@@ -29,9 +30,10 @@ function fetchTripDetails(tripId) {
             const xml = parser.parseFromString(xmlText, "application/xml");
             tripDestination = xml.querySelector("destination").textContent.trim();
             
-            // Update header with destination name
-            document.querySelector("h2").innerHTML = `Activities in <span class="destination-highlight">${tripDestination}</span>`;
         	fetchActivities(tripId);
+        	
+        	document.getElementById("activityDestinationHeading").textContent = tripDestination;
+			document.getElementById("addActivityBtn").href = `add.html?type=activity&tripId=${tripId}`;
         })
         .catch(error => console.error("Error fetching trip details:", error));
 }
@@ -45,7 +47,8 @@ function fetchActivities(tripId) {
     .then(xmlText => {
         // console.log("API Response: ", xmlText);
         const activities = parseXMLActivities(xmlText);
-        displayActivities(activities);
+        allActivities = activities;
+		displayActivities(allActivities);
     })
     .catch(error => console.error("Error fetching activities:", error));
 }
@@ -76,7 +79,8 @@ function parseXMLActivities(xmlText) {
 }
 
 // Display activities
-function displayActivities(activities,) {
+function displayActivities(activities) {
+	console.log("Activities received:", activities);
     const activitiesList = document.getElementById("activitiesList");
     // Clear previous activity
     activitiesList.innerHTML = ""; 
@@ -86,8 +90,8 @@ function displayActivities(activities,) {
         return;
     }
     
-    // Sort activities by date 
-    activities.sort((a, b) => new Date(a.activityDate.split("-").reverse().join("-")) - new Date(b.activityDate.split("-").reverse().join("-")));
+    // Sort activities by startDate asc
+    activities.sort((a, b) => toDate(a.activityDate) - toDate(b.activityDate));
 
     activities.forEach(activity => {
 		// Get folder name based on location
@@ -99,51 +103,38 @@ function displayActivities(activities,) {
         // console.log("activityImageName: ", activityImageName);
     
         const activityCard = document.createElement("div");
-        activityCard.classList.add("activity-card");
+        activityCard.className = "activity-card shadow-sm";
 
         activityCard.innerHTML = `
-            <div class="activity-image-container">
-                <img src="images/${folderName}/${activityImageName}.jpg" 
-                     alt="${activity.name}" 
-                     onerror="this.onerror=null; this.src='images/default.jpg';">
-            </div>
-            
-            <div class="activity-info">
-                <h3>${activity.name}</h3>
-                <p><strong>Date:</strong> ${(activity.activityDate)}</p>
-                <p><strong>Location:</strong> ${activity.location}</p>
-                <p><strong>Cost:</strong> \u20AC${parseFloat(activity.cost).toFixed(2)}</p>
-                <br>
-                <div class="activity-actions">
-                	<button class="edit-btn">Edit</button>
-            	</div>
-           </div>
-        `;
+	    <div class="card shadow-sm h-100">
+	        <div class="activity-image-container">
+	        <img src="images/${folderName}/${activityImageName}.jpg" class="card-img-top" alt="${activity.name}" onerror="this.onerror=null; this.src='images/default.jpg';" />
+	            <button class="btn-sm position-absolute top-0 end-0 m-2 delete-btn" title="Delete">&times;</button>
+	        </div>
+	        <div class="card-body d-flex flex-column justify-content-between">
+	            <div>
+	                <h5 class="card-title text-start">${activity.name}</h5>
+	                <p class="card-text mb-1"><strong>Date:</strong> ${activity.activityDate}</p>
+	                <p class="card-text mb-1"><strong>Location:</strong> ${activity.location}</p>
+	                <p class="card-text mb-3"><strong>Cost:</strong> €${parseFloat(activity.cost).toFixed(2)}</p>
+	            </div>
+	            <button class="w-100 mt-auto edit-btn">Edit</button>
+	        </div>
+	    </div>
+		`;
         
         // Create delete button
-        const deleteButton = document.createElement("button");
-        deleteButton.classList.add("delete-btn");
-        deleteButton.innerHTML = "&times;";
-        deleteButton.addEventListener("click", (event) => {
-			// Prevent unexpected modal triggers
-            event.stopPropagation(); 
-            confirmDeleteActivity(activity.activityId, activity.name);
-        });
+        const deleteButton = activityCard.querySelector(".delete-btn");
+		deleteButton.addEventListener("click", (event) => {
+		    event.stopPropagation();
+		    confirmDeleteActivity(activity.activityId, activity.name);
+		});
 
-        // Create delete container and attach delete btn
-        const deleteContainer = document.createElement("div");
-        deleteContainer.classList.add("delete-container");
-        deleteContainer.appendChild(deleteButton);
-        
         const editButton = activityCard.querySelector(".edit-btn");
-        editButton.addEventListener("click", (event) => {
-            event.stopPropagation();
-            window.location.href = `editActivity.html?activityId=${activity.activityId}`;
-        });
-
-        // Append delete btn inside activity img container
-        const imageContainer = activityCard.querySelector(".activity-image-container");
-        imageContainer.appendChild(deleteContainer);
+		editButton.addEventListener("click", (event) => {
+		    event.stopPropagation();
+		    window.location.href = `edit.html?type=activity&activityId=${activity.activityId}`;
+		});
 
         activitiesList.appendChild(activityCard);
     });
@@ -189,49 +180,26 @@ function deleteActivity(activityId) {
     .catch(error => console.error("Error deleting activity:", error));
 }
 
-/* On click event for modal buttons */
-document.getElementById("confirmDeleteBtn").addEventListener("click", function() {
+document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
     if (selectedActivityId) {
         deleteActivity(selectedActivityId);
     }
 });
 
-document.getElementById("cancelDeleteBtn").addEventListener("click", closeModal);
+// Filter by cost
+document.getElementById("costFilter").addEventListener("change", function () {
+    const selected = this.value;
+    let filtered = allActivities;
 
-function closeModal() {
-    document.getElementById("deleteModal").style.display = "none";
-}
+    if (selected === "under100") {
+        filtered = allActivities.filter(a => parseFloat(a.cost) < 100);
+    } else if (selected === "100to1000") {
+        filtered = allActivities.filter(a => parseFloat(a.cost) >= 100 && parseFloat(a.cost) <= 1000);
+    } else if (selected === "1000to2000") {
+        filtered = allActivities.filter(a => parseFloat(a.cost) > 1000 && parseFloat(a.cost) <= 2000);
+    } else if (selected === "over2000") {
+        filtered = allActivities.filter(a => parseFloat(a.cost) > 2000);
+    }
 
-/* Nav Bar Dropdown */
-function populateTripDropdown() {
-    fetch("http://localhost:8080/A00279259_Backend/rest/trips", {
-        headers: { "Accept": "application/xml" }
-    })
-    .then(response => response.text())
-    .then(xmlString => {
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(xmlString, "application/xml");
-        const tripElements = xml.getElementsByTagName("trip");
-
-        const dropdown = document.getElementById("tripDropdown");
-
-        if (tripElements.length === 0) {
-            const noTrips = document.createElement("li");
-            noTrips.textContent = "No trips available";
-            dropdown.appendChild(noTrips);
-            return;
-        }
-
-        // Populate dropdown with trips
-        for (let trip of tripElements) {
-            let tripId = trip.getElementsByTagName("tripId")[0].textContent;
-            let destination = trip.getElementsByTagName("destination")[0].textContent;
-
-            const tripItem = document.createElement("a");
-            tripItem.href = `activities.html?tripId=${tripId}`;
-            tripItem.textContent = destination;
-            dropdown.appendChild(tripItem);
-        }
-    })
-    .catch(error => console.error("Error fetching trips for dropdown:", error));
-}
+    displayActivities(filtered);
+});

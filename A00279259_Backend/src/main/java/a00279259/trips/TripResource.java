@@ -2,6 +2,7 @@ package a00279259.trips;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -42,19 +43,12 @@ public class TripResource {
 		return TripDAOsql.instance.getActivitiesByTrip(Integer.parseInt(tripId));
     }
 	
-//	@POST
-//	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_HTML})
-//	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-//	public void addTrip(Trip trip, @Context HttpServletResponse servletResponse) throws IOException {
-//		
-//		Trip newTrip = TripDAOsql.instance.addTrip(trip);
-//		
-//		if (newTrip == null) {
-//	        System.out.println("Error inserting trip.");
-//	        servletResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error inserting trip.");
-//	        return;
-//	    }
-//	}
+	@GET
+	@Path("/activity-stats")
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	public List<Map<String, Object>> getTripActivityStats() {
+	    return TripDAOsql.instance.getActivityStatsPerTrip();
+	}
 	
 	@POST
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -101,5 +95,4 @@ public class TripResource {
 	public Trip deleteTrip(@PathParam("tripId") String id) {
 		return TripDAOsql.instance.deleteTrip(Integer.parseInt(id));
 	}
-
 }
